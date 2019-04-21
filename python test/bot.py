@@ -1,6 +1,7 @@
 import discord
 import my_token
 import asyncio
+import aiohttp
 
 
 # client=discord.Client()
@@ -46,9 +47,10 @@ class MyClient(discord.Client):
         #await message.channel.send(''.join(self.get_all_channels()))
 
     async def on_message(self, message):
-        if message.content.startswith('hello'):
+        if message.content.startswith('book'):
             print('%r'%(message.channel))
             print(message.channel)
+
             await message.channel.send('Hello')
            
             
@@ -67,7 +69,7 @@ class MyClient(discord.Client):
             for channel in sorted(channels,key=lambda x:x.position):
                 categories.setdefault(str(channel.category),[]).append(channel.name)
                 
-            await '\n'.join('%s\n     %s' %(i,j) for i,j in zip(categories['None'],(categories[i] for i in categories['None']))))
+            await msg.edit(content ='\n'.join('%s\n     %s' %(i,j) for i,j in zip(categories['None'],(categories[i] for i in categories['None'])))))
 
             counter += 1
             print(f'it works {counter} times')
