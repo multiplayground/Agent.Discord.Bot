@@ -9,6 +9,9 @@ pylint = "*"
 [packages]
 discord-py = "*"
 aiohttp = "*"
+requests = "*"
+connexion = {extras = ["swagger-ui"],version = "*"}
+aio-pika = "*"
 
 [requires]
 python_version = "3.7"
