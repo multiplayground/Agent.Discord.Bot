@@ -18,6 +18,7 @@ client=discord.Client()
 
 
 
+
 async def work_with_msg(message):
     global client
     global received
@@ -45,10 +46,9 @@ async def on_ready():
     print('Username: {0.name}\nID: {0.id}'.format(client.user))
     loop = asyncio.get_event_loop()
     loop.create_task(main(loop))
-
-
-
-
+    
+    
+    
 async def main(loop):
     #start rabbitMQ
     global received
@@ -60,30 +60,56 @@ async def main(loop):
         async for message in queue_iter:
             async with message.process():
                 received= message.body
+    
     await queue.consume(work_with_msg)
+    #await queue.consume(my_background_task)
 
 
 async def my_background_task():
     global client
     await client.wait_until_ready()
     counter = 0
-    channel = client.get_channel(568791671764942868) # channel ID goes here
-    print(client.get_all_channels())
-    msg = await channel.send('starts')
-    # while True:
-    #     channels=client.get_all_channels()
-    #     categories={}
-    #     for channel in sorted(channels,key=lambda x:x.position):
-    #         categories.setdefault(str(channel.category),[]).append(channel.name)
-            
-    #     await msg.edit(content ='\n'.join('%s\n     %s' %(i,j) for i,j in zip(categories['None'],(categories[i] for i in categories['None']))))
+    channel_to_send = client.get_channel(568791671764942868) # channel ID goes here
+    msg = await channel_to_send.send('test')
+    while True:
+        categories={}
+        channels_dict={}
+        channels=client.get_all_channels()
+        for channel in sorted(channels,key=lambda x:x.position):
+            categories.setdefault(str(channel.category),[]).append(channel.name)
+        for indx,i in enumerate(categories['None']):
+            channels_dict['string_'+str(indx)]=('\t'.join(map(str,categories[i])).capitalize())
 
-    #     counter += 1
-    #     print(f'it works {counter} times')
-    #     await asyncio.sleep(30) # task runs every 60 seconds
+        print(f'it works {counter} times')
+        await msg.edit(content ='\n\n'.join('%s\n     %s' %(i,j) for i,j in zip(categories['None'],(v for k,v in channels_dict.items()))))
 
-bg_task = client.loop.create_task(my_background_task())
 
+        counter += 1
+        await asyncio.sleep(30) # task runs every 60 seconds
+
+async def loading():
+    await client.wait_until_ready()
+    channel_to_send = client.get_channel(568791671764942868) # channel ID goes here
+    msg = await channel_to_send.send('━')
+    while True:
+        await msg.edit(content='╲')
+        await asyncio.sleep(0.05)
+        await msg.edit(content='│')
+        await asyncio.sleep(0.05)
+        await msg.edit(content='╱')
+        await asyncio.sleep(0.05)
+        await msg.edit(content='━')
+        await asyncio.sleep(0.05)
+        await msg.edit(content='│')
+        await asyncio.sleep(0.05)
+        await msg.edit(content='╱')
+        await asyncio.sleep(0.05)
+        await msg.edit(content='━')
+        await asyncio.sleep(0.05)
+
+#bg_task = client.loop.ensure_furure(my_background_task())
+asyncio.ensure_future(my_background_task())
+asyncio.ensure_future(loading())
 client.run(my_token.token)
 
 
