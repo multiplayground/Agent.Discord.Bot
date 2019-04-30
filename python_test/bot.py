@@ -2,114 +2,114 @@ import discord
 import my_token
 import asyncio
 import aiohttp
-import requests
-from connexion.resolver import RestyResolver
-import connexion
-from multiprocessing import Pool
-from multiprocessing import Process
 import aio_pika
-
+from bot_modules.serv_struct import my_background_task,channels_to_MQ
+import bot_modules.make_api as api
+import json
 
 initialized=0
-received=''
-send=[]
-
+received=['___no']
+send=['___no']
+channel_to_send=None
+connection=None
 client=discord.Client()
+initialized=0
 
 
-
-
-async def work_with_msg(message):
-    global client
-    global received
-    print(received)
-    print(message.ack())
+# async def work_with_msg(message):
+#     global connection
+#     while True:
+#         await send_in_rebbit(connection,channels_to_MQ)
+#         await asyncio.sleep(3)
 
 
 
 @client.event
 async def on_message (message):
-    print (message.content)
+    global channel_to_send
+    global received
+    print (message.content,message.id)
     if message.content.startswith('hello'):
         await message.channel.send('Hello')
         await message.channel.send(received)
         
 
-    if message.content.startswith('!'):
-        await before.edit(content='40')
-    
+    if message.content=='!':
+        print('=======',message.channel.id)
+        channel_to_send= message.channel
 
+    if message.content.startswith('msg'):
+        print(received)
+        await message.channel.send(received.pop() if received[-1]!='___no' else 'no massege in que')
+        
+    
 @client.event
 async def on_ready():
     global initialized
+    
     print('Connected!')
     print('Username: {0.name}\nID: {0.id}'.format(client.user))
-    loop = asyncio.get_event_loop()
-    loop.create_task(main(loop))
-    
-    
-    
+    if initialized == 0:
+        loop = asyncio.get_event_loop()
+        loop.create_task(main(loop))
+        loop.create_task(loading())
+        #loop.create_task(send_in_rebbit(connection))
+        initialized = 1
+
+
 async def main(loop):
     #start rabbitMQ
     global received
-    connection = await aio_pika.connect(f"amqp://root:toor@157.230.108.47/",loop=loop)
+    global connection
+    connection = await aio_pika.connect(    "amqp://root:toor@157.230.108.47/",loop=loop)
     print("rabbitMQ connected :)")
-    channel = await connection.channel()
-    queue = await channel.declare_queue("msg_out")
-    async with queue.iterator() as queue_iter:
+    recieve_channel = await connection.channel()
+    send_channel = await connection.channel()
+    recieve_queue = await recieve_channel.declare_queue("in_MLP_bot")
+    send_queue = await send_channel.declare_queue("out_MLP_bot")
+    while True: 
+            await send_channel.default_exchange.publish(aio_pika.Message( body = 'test send'.encode()),routing_key='out_MLP_bot')
+            print(my_background_task(client).next)
+            await asyncio.sleep(10)   
+    async with recieve_queue.iterator() as queue_iter:
         async for message in queue_iter:
             async with message.process():
-                received= message.body
+                received.append(message.body)
     
-    await queue.consume(work_with_msg)
-    #await queue.consume(my_background_task)
-
-
-async def my_background_task():
-    global client
-    await client.wait_until_ready()
-    counter = 0
-    channel_to_send = client.get_channel(568791671764942868) # channel ID goes here
-    msg = await channel_to_send.send('test')
-    while True:
-        categories={}
-        channels_dict={}
-        channels=client.get_all_channels()
-        for channel in sorted(channels,key=lambda x:x.position):
-            categories.setdefault(str(channel.category),[]).append(channel.name)
-        for indx,i in enumerate(categories['None']):
-            channels_dict['string_'+str(indx)]=('\t'.join(map(str,categories[i])).capitalize())
-
-        print(f'it works {counter} times')
-        await msg.edit(content ='\n\n'.join('%s\n     %s' %(i,j) for i,j in zip(categories['None'],(v for k,v in channels_dict.items()))))
-
-
-        counter += 1
-        await asyncio.sleep(30) # task runs every 60 seconds
+    
+async def send_in_rebbit(connection):
+    async with connection:
+        routing_key = "out_MLP_bot"
+        channel = await connection.channel()
+        while True: 
+            await channel.default_exchange.publish(aio_pika.Message( body='Test send'),routing_key=routing_key)
+            print('in send ')
+            await asyncio.sleet(10)    
 
 async def loading():
+    global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(568791671764942868) # channel ID goes here
-    msg = await channel_to_send.send('━')
+    channel_to_send = client.get_channel(568791671764942868) # test 568791671764942868  auto 571991415350099972
+    msg = await channel_to_send.send('starting...')
+    #msg = await channel_to_send.fetch_message(572041231857614858)
+    msg_id=msg.id
     while True:
-        await msg.edit(content='╲')
-        await asyncio.sleep(0.05)
-        await msg.edit(content='│')
-        await asyncio.sleep(0.05)
-        await msg.edit(content='╱')
-        await asyncio.sleep(0.05)
-        await msg.edit(content='━')
-        await asyncio.sleep(0.05)
-        await msg.edit(content='│')
-        await asyncio.sleep(0.05)
-        await msg.edit(content='╱')
-        await asyncio.sleep(0.05)
-        await msg.edit(content='━')
-        await asyncio.sleep(0.05)
+        if channel_to_send!=msg.channel:
+            await msg.delete()  
+            msg = await channel_to_send.send('\n\nstarting...')
+            msg_id=msg.id
+        msg = await channel_to_send.fetch_message(msg_id)
+        await msg.edit(content='\n\nMLP Bot v 0.0.1\n│')
+        await msg.edit(content='\n\nMLP Bot v 0.0.1\n╱')
+        await msg.edit(content='\n\nMLP Bot v 0.0.1\n━')
+        await msg.edit(content='\n\nMLP Bot v 0.0.1\n╲')
+       
+
+
 
 #bg_task = client.loop.ensure_furure(my_background_task())
-asyncio.ensure_future(my_background_task())
-asyncio.ensure_future(loading())
+#asyncio.ensure_future(my_background_task(client))
+#asyncio.ensure_future(loading())
 client.run(my_token.token)
 
 
