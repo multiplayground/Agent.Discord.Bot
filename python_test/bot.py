@@ -3,7 +3,7 @@ import my_token
 import asyncio
 import aiohttp
 import aio_pika
-from bot_modules.serv_struct import my_background_task,channels_to_MQ
+from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 import bot_modules.make_api as api
 import json
 
@@ -68,8 +68,8 @@ async def main(loop):
     recieve_queue = await recieve_channel.declare_queue("in_MLP_bot")
     send_queue = await send_channel.declare_queue("out_MLP_bot")
     while True: 
-            await send_channel.default_exchange.publish(aio_pika.Message( body = 'test send'.encode()),routing_key='out_MLP_bot')
-            print(my_background_task(client).next)
+            await send_channel.default_exchange.publish(aio_pika.Message( body = json.dumps(return_struct()).encode()),routing_key='out_MLP_bot')
+            #print(json.dumps(return_struct()))
             await asyncio.sleep(10)   
     async with recieve_queue.iterator() as queue_iter:
         async for message in queue_iter:
@@ -108,7 +108,7 @@ async def loading():
 
 
 #bg_task = client.loop.ensure_furure(my_background_task())
-#asyncio.ensure_future(my_background_task(client))
+asyncio.ensure_future(my_background_task(client))
 #asyncio.ensure_future(loading())
 client.run(my_token.token)
 
