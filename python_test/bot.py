@@ -6,6 +6,7 @@ import aio_pika
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 import bot_modules.make_api as api
 import json
+import bot_modules.send_img as send_img
 
 initialized=0
 received=['___no']
@@ -14,7 +15,8 @@ channel_to_send=None
 connection=None
 client=discord.Client()
 initialized=0
-
+switch=True
+start_rebbit=True
 
 # async def work_with_msg(message):
 #     global connection
@@ -28,6 +30,8 @@ initialized=0
 async def on_message (message):
     global channel_to_send
     global received
+    global switch
+    global start_rebbit
     print (message.content,message.id)
     if message.content.startswith('hello'):
         await message.channel.send('Hello')
@@ -37,10 +41,29 @@ async def on_message (message):
     if message.content=='!':
         print('=======',message.channel.id)
         channel_to_send= message.channel
+        await message.delete()
 
     if message.content.startswith('msg'):
         print(received)
         await message.channel.send(received.pop() if received[-1]!='___no' else 'no massege in que')
+        
+
+    if message.content=='img':
+        if switch:
+            await send_img.send_img(message.channel,'py1.jpeg')
+            switch=False
+        else:
+            await send_img.send_img(message.channel,'py2.png')
+            switch =True
+        print(switch)
+        await message.delete()
+
+    if message.content=='start rabbit':
+        start_rebbit=True
+        await message.delete()
+    if message.content =='stop rabbit':
+        start_rebbit=False
+        await message.delete()
         
     
 @client.event
@@ -59,6 +82,7 @@ async def on_ready():
 
 async def main(loop):
     #start rabbitMQ
+    global start_rebbit
     global received
     global connection
     connection = await aio_pika.connect(    "amqp://root:toor@157.230.108.47/",loop=loop)
@@ -67,24 +91,17 @@ async def main(loop):
     send_channel = await connection.channel()
     recieve_queue = await recieve_channel.declare_queue("in_MLP_bot")
     send_queue = await send_channel.declare_queue("out_MLP_bot")
-    while True: 
+    while start_rebbit: 
             await send_channel.default_exchange.publish(aio_pika.Message( body = json.dumps(return_struct()).encode()),routing_key='out_MLP_bot')
             #print(json.dumps(return_struct()))
             await asyncio.sleep(10)   
+            print('sended ',start_rebbit)
     async with recieve_queue.iterator() as queue_iter:
         async for message in queue_iter:
             async with message.process():
                 received.append(message.body)
     
-    
-async def send_in_rebbit(connection):
-    async with connection:
-        routing_key = "out_MLP_bot"
-        channel = await connection.channel()
-        while True: 
-            await channel.default_exchange.publish(aio_pika.Message( body='Test send'),routing_key=routing_key)
-            print('in send ')
-            await asyncio.sleet(10)    
+   
 
 async def loading():
     global channel_to_send
