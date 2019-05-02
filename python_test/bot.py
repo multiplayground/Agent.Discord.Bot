@@ -46,7 +46,6 @@ async def on_message (message):
     if message.content.startswith('msg'):
         print(received)
         await message.channel.send(received.pop() if received[-1]!='___no' else 'no massege in que')
-        
 
     if message.content=='img':
         if switch:
@@ -61,11 +60,16 @@ async def on_message (message):
     if message.content=='start rabbit':
         start_rebbit=True
         await message.delete()
+    
     if message.content =='stop rabbit':
         start_rebbit=False
         await message.delete()
+
+    if message.content == 'call me':
+        print (message.author)
+        #await message.autor.send(message.autor,'hi')    
+        await message.author.send('hi')
         
-    
 @client.event
 async def on_ready():
     global initialized
@@ -75,7 +79,7 @@ async def on_ready():
     if initialized == 0:
         loop = asyncio.get_event_loop()
         loop.create_task(main(loop))
-        loop.create_task(loading())
+        #loop.create_task(loading())
         #loop.create_task(send_in_rebbit(connection))
         initialized = 1
 
