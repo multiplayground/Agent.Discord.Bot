@@ -10,7 +10,7 @@ async def send_img(channel,image):
     if call:
         await img.delete()
     call=True
-    img = await channel.send(file=discord.File(f'D:/Python/MLP/Agent.Discord.Bot/python_test/bot_modules/{image}'))
+    img = await channel.send(file=discord.File(f'D:/Python/MLP/Agent.Discord.Bot/python_test/static/{image}'))
 
     
     

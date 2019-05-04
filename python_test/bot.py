@@ -7,6 +7,8 @@ from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_str
 import bot_modules.make_api as api
 import json
 import bot_modules.send_img as send_img
+import bot_modules.manage_with_db as m_db 
+
 
 initialized=0
 received=['___no']
@@ -16,7 +18,7 @@ connection=None
 client=discord.Client()
 initialized=0
 switch=True
-start_rebbit=True
+start_rebbit=False
 
 # async def work_with_msg(message):
 #     global connection
@@ -24,7 +26,11 @@ start_rebbit=True
 #         await send_in_rebbit(connection,channels_to_MQ)
 #         await asyncio.sleep(3)
 
-
+@client.event
+async def on_raw_reaction_add(pyload):
+    global client
+    print (dir(pyload),pyload.user_id,pyload.emoji)
+    await client.get_channel(pyload.channel_id).send(f'you have got {pyload.emoji} emoji')
 
 @client.event
 async def on_message (message):
@@ -65,10 +71,15 @@ async def on_message (message):
         start_rebbit=False
         await message.delete()
 
-    if message.content == 'call me':
+    if message.content == 'write':
         print (message.author)
         #await message.autor.send(message.autor,'hi')    
         await message.author.send('hi')
+
+    if message.content.startswith('!show'):
+        example=m_db.User_Reward()
+        #await message.autor.send(message.autor,'hi')    
+        await message.channel.send(example.get_all_medals())
         
 @client.event
 async def on_ready():
@@ -78,32 +89,14 @@ async def on_ready():
     print('Username: {0.name}\nID: {0.id}'.format(client.user))
     if initialized == 0:
         loop = asyncio.get_event_loop()
-        loop.create_task(main(loop))
-        #loop.create_task(loading())
-        #loop.create_task(send_in_rebbit(connection))
+        #loop.create_task(main(loop))
+        loop.create_task(loading())
+        #loop.create_task(my_background_task(client))
+        
         initialized = 1
 
 
-async def main(loop):
-    #start rabbitMQ
-    global start_rebbit
-    global received
-    global connection
-    connection = await aio_pika.connect(    "amqp://root:toor@157.230.108.47/",loop=loop)
-    print("rabbitMQ connected :)")
-    recieve_channel = await connection.channel()
-    send_channel = await connection.channel()
-    recieve_queue = await recieve_channel.declare_queue("in_MLP_bot")
-    send_queue = await send_channel.declare_queue("out_MLP_bot")
-    while start_rebbit: 
-            await send_channel.default_exchange.publish(aio_pika.Message( body = json.dumps(return_struct()).encode()),routing_key='out_MLP_bot')
-            #print(json.dumps(return_struct()))
-            await asyncio.sleep(10)   
-            print('sended ',start_rebbit)
-    async with recieve_queue.iterator() as queue_iter:
-        async for message in queue_iter:
-            async with message.process():
-                received.append(message.body)
+
     
    
 
@@ -127,9 +120,30 @@ async def loading():
        
 
 
+# async def main(loop):
+#     #start rabbitMQ
+#     global start_rebbit
+#     global received
+#     global connection
+#     connection = await aio_pika.connect(    "amqp://root:toor@157.230.108.47/",loop=loop)
+#     print("rabbitMQ connected :)")
+#     recieve_channel = await connection.channel()
+#     send_channel = await connection.channel()
+#     recieve_queue = await recieve_channel.declare_queue("in_MLP_bot")
+#     send_queue = await send_channel.declare_queue("out_MLP_bot")
+#     while start_rebbit: 
+#             await send_channel.default_exchange.publish(aio_pika.Message( body = json.dumps(return_struct()).encode()),routing_key='out_MLP_bot')
+#             #print(json.dumps(return_struct()))
+#             await asyncio.sleep(10)   
+#             print('sended ',start_rebbit)
+#     async with recieve_queue.iterator() as queue_iter:
+#         async for message in queue_iter:
+#             async with message.process():
+#                 received.append(message.body)
+
 
 #bg_task = client.loop.ensure_furure(my_background_task())
-asyncio.ensure_future(my_background_task(client))
+#asyncio.ensure_future(my_background_task(client))
 #asyncio.ensure_future(loading())
 client.run(my_token.token)
 
