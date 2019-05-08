@@ -13,13 +13,8 @@ class RpcClient:
     _user: str
     _pass: str
 
-    def __init__(self, 
-                aHostName: str = "localhost",
-                aVirtualHost: str = "/",
-                aPort: int = 5672,
-                aQueueName: str = "rpc_queue",
-                aUser: str = "guest",
-                aPass: str = "guest"):
+    def __init__(self,aHostName: str = "localhost", aVirtualHost: str = "/", aPort: int = 5672,
+                    aQueueName: str = "rpc_queue",  aUser: str = "guest", aPass: str = "guest"):
         # Constructor
         self._hostName = aHostName
         self._virtualHost = aVirtualHost

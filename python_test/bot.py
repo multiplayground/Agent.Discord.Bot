@@ -26,11 +26,11 @@ start_rebbit=False
 #         await send_in_rebbit(connection,channels_to_MQ)
 #         await asyncio.sleep(3)
 
-@client.event
-async def on_raw_reaction_add(pyload):
-    global client
-    print (dir(pyload),pyload.user_id,pyload.emoji)
-    await client.get_channel(pyload.channel_id).send(f'you have got {pyload.emoji} emoji')
+# @client.event
+# async def on_raw_reaction_add(pyload):
+#     global client
+#     print (dir(pyload),pyload.user_id,pyload.emoji)
+#     await client.get_channel(pyload.channel_id).send(f'you have got {pyload.emoji} emoji')
 
 @client.event
 async def on_message (message):
@@ -90,8 +90,8 @@ async def on_ready():
     if initialized == 0:
         loop = asyncio.get_event_loop()
         #loop.create_task(main(loop))
-        loop.create_task(loading())
-        #loop.create_task(my_background_task(client))
+        #loop.create_task(loading())
+        loop.create_task(my_background_task(client))
         
         initialized = 1
 

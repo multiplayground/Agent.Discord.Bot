@@ -13,9 +13,12 @@ requests = "*"
 connexion = {extras = ["swagger-ui"],version = "*"}
 aio-pika = "==5.5.2"
 requirements-txt = "*"
-aip-pika = "*"
 psycopg2 = "*"
 pika = "*"
+pickle = "*"
+discord = "*"
+dill = "*"
+weakref = "*"
 
 [requires]
 python_version = "3.7"
