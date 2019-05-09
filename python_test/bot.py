@@ -93,10 +93,6 @@ async def on_ready():
         initialized = 1
 
 
-
-    
-   
-
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
@@ -116,4 +112,6 @@ async def loading():
         await msg.edit(content='\n\nMLP Bot v 0.0.1\n╲')
        
 
+
+client.run(my_token.token)
 
