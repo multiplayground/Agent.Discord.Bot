@@ -19,6 +19,7 @@ pickle = "*"
 discord = "*"
 dill = "*"
 weakref = "*"
+image = "*"
 
 [requires]
 python_version = "3.7"
