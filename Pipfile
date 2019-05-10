@@ -12,13 +12,10 @@ aiohttp = "*"
 requests = "*"
 connexion = {extras = ["swagger-ui"],version = "*"}
 aio-pika = "==5.5.2"
-requirements-txt = "*"
 psycopg2 = "*"
 pika = "*"
-pickle = "*"
 discord = "*"
 dill = "*"
-weakref = "*"
 image = "*"
 
 [requires]
