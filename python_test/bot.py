@@ -15,12 +15,11 @@ received=['___no']
 send=['___no']
 channel_to_send=None
 connection=None
+client=discord.Client()
 initialized=0
 switch=True
 start_rebbit=False
 
-
-client=discord.Client()
 
 @client.event
 async def on_message (message):
@@ -49,6 +48,8 @@ async def on_message (message):
         await message.delete()
 
    
+
+   
         
 @client.event
 async def on_ready():
@@ -58,6 +59,7 @@ async def on_ready():
     print('Username: {0.name}\nID: {0.id}'.format(client.user))
     if initialized == 0:
         loop = asyncio.get_event_loop()
+        #loop.create_task(main(loop))
         loop.create_task(loading())
         loop.create_task(my_background_task(client))
         
@@ -67,9 +69,9 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(571991415350099972) 
+    channel_to_send = client.get_channel(571991415350099972) # test 568791671764942868  auto 571991415350099972
     msg = await channel_to_send.send('starting...')
-    
+    #msg = await channel_to_send.fetch_message(572041231857614858)
     msg_id=msg.id
     while True:
         if channel_to_send!=msg.channel:
