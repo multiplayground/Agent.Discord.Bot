@@ -1,7 +1,10 @@
 import asyncio
 import discord
+import os.path
 
 
+
+static=os.path.join(os.path.dirname(os.path.dirname(__file__)),'static/')
 call=False
 img=None
 async def send_img(channel,image):
@@ -10,7 +13,8 @@ async def send_img(channel,image):
     if call:
         await img.delete()
     call=True
-    img = await channel.send(file=discord.File(f'D:/Python/MLP/Agent.Discord.Bot/python_test/static/{image}'))
+    print(static+image)
+    img = await channel.send(file=discord.File(static+image))
 
     
     

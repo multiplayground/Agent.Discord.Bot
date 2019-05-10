@@ -15,4 +15,3 @@ class User_Reward:
         self.cur.close()
         return self.all_tabl
 
-    

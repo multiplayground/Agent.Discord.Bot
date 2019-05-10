@@ -15,10 +15,12 @@ received=['___no']
 send=['___no']
 channel_to_send=None
 connection=None
-client=discord.Client()
 initialized=0
 switch=True
 start_rebbit=False
+
+
+client=discord.Client()
 
 @client.event
 async def on_message (message):
@@ -37,16 +39,6 @@ async def on_message (message):
         channel_to_send= message.channel
         await message.delete()
 
-    if message.content.startswith('msg'):
-        print(received)
-        await message.channel.send(received.pop() if received[-1]!='___no' else 'no massege in que')
-
-    if message.content=='img':
-    
-        await send_img.send_img(message.channel,'serv_sturct.png')
-        switch=False
-        
-        await message.delete()
 
     if message.content=='start rabbit':
         start_rebbit=True
@@ -56,15 +48,7 @@ async def on_message (message):
         start_rebbit=False
         await message.delete()
 
-    if message.content == 'write':
-        print (message.author)
-        #await message.autor.send(message.autor,'hi')    
-        await message.author.send('hi')
-
-    if message.content.startswith('!show'):
-        example=m_db.User_Reward()
-        #await message.autor.send(message.autor,'hi')    
-        await message.channel.send(example.get_all_medals())
+   
         
 @client.event
 async def on_ready():
@@ -74,22 +58,18 @@ async def on_ready():
     print('Username: {0.name}\nID: {0.id}'.format(client.user))
     if initialized == 0:
         loop = asyncio.get_event_loop()
-       
+        loop.create_task(loading())
         loop.create_task(my_background_task(client))
         
         initialized = 1
 
 
-
-    
-   
-
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(568791671764942868) # test 568791671764942868  auto 571991415350099972
+    channel_to_send = client.get_channel(571991415350099972) 
     msg = await channel_to_send.send('starting...')
-    #msg = await channel_to_send.fetch_message(572041231857614858)
+    
     msg_id=msg.id
     while True:
         if channel_to_send!=msg.channel:
@@ -103,4 +83,6 @@ async def loading():
         await msg.edit(content='\n\nMLP Bot v 0.0.1\n╲')
        
 
+
+client.run(my_token.token)
 
