@@ -60,25 +60,15 @@ async def my_background_task(client):
                     chan_per.setdefault(str(channel.category),[]).append(DiscordNode(channel.name,channel_type[channel._type],str(channel.category)))
             
 
-            
-            # for chan in chan_per["None"]:
-            #     print(chan.NodePName)
-            
-            # for key,chans in chan_per.items():
-            #    print(key)
-                    
-
-
-            i=0
+        
             for chan in chan_per["None"]:
                 globals()[f'{chan.NodePName}'] = tree.AddChild(chan)
-                i+=1
-            i=0
+        
             for key,chans in chan_per.items():
                 if key != 'None':
                     for chan in chans:
                         globals()[f'{key}'].AddChild(chan)
-                    i+=1
+                    
 
             j = tree.toJSON()
             
@@ -95,7 +85,5 @@ async def my_background_task(client):
             await send_img(client.get_channel(571991415350099972),'serv_sturct.png')
             
 
-                     
-        
         await asyncio.sleep(1)
         
