@@ -1,0 +1,25 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+
+[packages]
+discord-py = "*"
+aiohttp = "*"
+requests = "*"
+connexion = {extras = ["swagger-ui"],version = "*"}
+aio-pika = "==5.5.2"
+requirements-txt = "*"
+psycopg2 = "*"
+pika = "*"
+pickle = "*"
+discord = "*"
+dill = "*"
+weakref = "*"
+image = "*"
+
+[requires]
+python_version = "3.7"
