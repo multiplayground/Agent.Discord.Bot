@@ -7,7 +7,7 @@ from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_str
 import bot_modules.make_api as api
 import json
 import bot_modules.send_img as send_img
-import bot_modules.manage_with_db as m_db 
+
 
 
 initialized=0
@@ -28,14 +28,14 @@ async def on_message (message):
     global received
     global switch
     global start_rebbit
-    print (message.content,message.id,message.channel)
+    #print (message.content,message.id,message.channel)
     if message.content.startswith('hello'):
         await message.channel.send('Hello')
         await message.channel.send(received)
         
 
     if message.content=='!':
-        print('=======',message.channel.id)
+        
         channel_to_send= message.channel
         await message.delete()
 

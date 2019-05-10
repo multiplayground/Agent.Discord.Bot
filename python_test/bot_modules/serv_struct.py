@@ -34,7 +34,7 @@ async def my_background_task(client):
     global channels_to_MQ
     await client.wait_until_ready()
     
-    channel_to_send = client.get_channel(568791671764942868) # 568791671764942868 -noisy tests 571991415350099972 - automaton
+    channel_to_send = client.get_channel(571991415350099972) # 568791671764942868 -noisy tests 571991415350099972 - automaton
     #msg = await channel_to_send.send('starting...')
     #msg = await channel_to_send.fetch_message(572039983196536851)
     channels_str=None
