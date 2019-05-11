@@ -77,10 +77,10 @@ async def loading():
             msg = await channel_to_send.send('\n\nstarting...')
             msg_id=msg.id
         msg = await channel_to_send.fetch_message(msg_id)
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n│')
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n╱')
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n━')
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n╲')
+        await msg.edit(content='MLP Bot v 0.0.2\n│')
+        await msg.edit(content='MLP Bot v 0.0.2\n╱')
+        await msg.edit(content='MLP Bot v 0.0.2\n━')
+        await msg.edit(content='MLP Bot v 0.0.2\n╲')
        
 
 
