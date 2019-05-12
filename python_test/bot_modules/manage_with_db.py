@@ -4,7 +4,7 @@ class User_Reward:
     cur= None
     def __init__ (self):
         global cur 
-        self.connect = psycopg2.connect(host="157.230.108.47",database="AlTheOne", user="AlTheOne", password="pgpass")
+        self.connect = psycopg2.connect(host="157.230.108.47",database="base_datos", user="admin", password="secret")
         cur = self.connect.cursor()
         print("i'm created")
     
@@ -15,3 +15,6 @@ class User_Reward:
         self.cur.close()
         return self.all_tabl
 
+if __name__ == '__main__':
+    base=User_Reward()
+    print(base.get_all_medals())

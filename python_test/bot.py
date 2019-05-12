@@ -6,8 +6,10 @@ import aio_pika
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 import bot_modules.make_api as api
 import json
-import bot_modules.send_img as send_img
-import bot_modules.manage_with_db as m_db 
+from bot_modules.send_img import send_img
+import bot_modules.manage_with_db as m_db
+import bot_modules.reaction_hendler as r_hd
+from bot_modules.User import User
 
 
 initialized=0
@@ -28,7 +30,9 @@ async def on_message (message):
     global received
     global switch
     global start_rebbit
-    print (message.content,message.id,message.channel)
+    print (message.content,message.id,message.channel,'\n',message.attachments)
+
+
     if message.content.startswith('hello'):
         await message.channel.send('Hello')
         await message.channel.send(received)
@@ -39,16 +43,25 @@ async def on_message (message):
         channel_to_send= message.channel
         await message.delete()
 
-
-    if message.content=='start rabbit':
-        start_rebbit=True
+    if message.content=='img':
+        channel_to_send= message.channel
         await message.delete()
+        await send_img('py1.jpeg')
+
+@client.event
+async def on_raw_reaction_add(payload):
+    user_id=payload.user_id
+
+    guild=client.get_guild(payload.guild_id)
+    member=guild.get_member(user_id)    
+    roles=[str(role) for role in member.roles]
+
+    emoji=payload.emoji.name
     
-    if message.content =='stop rabbit':
-        start_rebbit=False
-        await message.delete()
-
-   
+    message = client.fetch_message(payload.message_id)
+    print(message)
+    if 'DiscordAdmin' or 'Curator' in roles:
+        await r_hd.deal_with_reaciton(payload)
         
 @client.event
 async def on_ready():
@@ -59,7 +72,7 @@ async def on_ready():
     if initialized == 0:
         loop = asyncio.get_event_loop()
         loop.create_task(loading())
-        loop.create_task(my_background_task(client))
+        #loop.create_task(my_background_task(client))
         
         initialized = 1
 
@@ -67,7 +80,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(571991415350099972) 
+    channel_to_send = client.get_channel(568791671764942868) 
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id
