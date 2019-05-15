@@ -9,12 +9,11 @@ import json
 from bot_modules.send_img import send_img
 import bot_modules.manage_with_db as m_db
 import bot_modules.reaction_hendler as r_hd
-from bot_modules.User import User
+import bot_modules.user_score as u_sc
 
 
-initialized=0
-received=['___no']
-send=['___no']
+
+
 channel_to_send=None
 connection=None
 initialized=0
@@ -30,12 +29,12 @@ async def on_message (message):
     global received
     global switch
     global start_rebbit
-    print (message.content,message.id,message.channel,'\n',message.attachments)
+    print (message.content,message.id,message.channel,message.attachments)
 
 
     if message.content.startswith('hello'):
         await message.channel.send('Hello')
-        await message.channel.send(received)
+      
         
 
     if message.content=='!':
@@ -43,10 +42,11 @@ async def on_message (message):
         channel_to_send= message.channel
         await message.delete()
 
-    if message.content=='img':
-        channel_to_send= message.channel
-        await message.delete()
-        await send_img('py1.jpeg')
+    if message.content.startswith('!score'):
+        top,*other=u_sc.get_medals()
+        await message.channel.send('**Ваш текущий уровень:**')
+        await message.channel.send(top)
+        await message.channel.send(f"Также у вас еще куча заслуг:\n{''.join(other)}")
 
 @client.event
 async def on_raw_reaction_add(payload):
@@ -58,17 +58,17 @@ async def on_raw_reaction_add(payload):
 
     emoji=payload.emoji.name
     
-    message = client.fetch_message(payload.message_id)
-    print(message)
+    
+    print(payload.emoji.id)
     if 'DiscordAdmin' or 'Curator' in roles:
         await r_hd.deal_with_reaciton(payload)
         
 @client.event
 async def on_ready():
     global initialized
-    
     print('Connected!')
     print('Username: {0.name}\nID: {0.id}'.format(client.user))
+
     if initialized == 0:
         loop = asyncio.get_event_loop()
         loop.create_task(loading())

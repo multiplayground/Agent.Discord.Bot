@@ -1,20 +1,18 @@
 import psycopg2
 
-class User_Reward:
-    cur= None
-    def __init__ (self):
-        global cur 
-        self.connect = psycopg2.connect(host="157.230.108.47",database="base_datos", user="admin", password="secret")
-        cur = self.connect.cursor()
-        print("i'm created")
-    
 
-    def get_all_medals(self):
-        self.cur.execute('''select * from test_reward_tbl''')
-        self.all_tabl = cur.fetchall()
-        self.cur.close()
-        return self.all_tabl
+    
+def get_score ():
+    connect = psycopg2.connect( host='157.230.108.47' ,dbname ="base_datos", user="admin", password="secret", port = '5432')
+    cur = connect.cursor()
+    cur.execute(''' select "level" from "userApp_userprogress" where user_id = 1 ''')
+    score=cur.fetchall()
+    cur.close()
+    connect.close()
+    return score[0][0]
+
+
+        
 
 if __name__ == '__main__':
-    base=User_Reward()
-    print(base.get_all_medals())
+    print(type(get_score()))
