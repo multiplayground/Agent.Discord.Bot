@@ -1,15 +1,14 @@
 import discord
 import my_token
 import asyncio
-import aiohttp
-import aio_pika
+import json
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 import bot_modules.make_api as api
-import json
 from bot_modules.send_img import send_img
 import bot_modules.manage_with_db as m_db
 import bot_modules.reaction_hendler as r_hd
-import bot_modules.user_score as u_sc
+import bot_modules.medal_user_score as u_sc
+import bot_modules.level_user_score as l_us
 
 
 
@@ -42,11 +41,19 @@ async def on_message (message):
         channel_to_send= message.channel
         await message.delete()
 
-    if message.content.startswith('!score'):
-        top,*other=u_sc.get_medals()
-        await message.channel.send('**Ваш текущий уровень:**')
-        await message.channel.send(top)
-        await message.channel.send(f"Также у вас еще куча заслуг:\n{''.join(other)}")
+    if message.content.startswith('!level'):
+        _,*comands=message.content.split()
+        if comands:
+            level = l_us.get_user_level(comands[0])
+            await message.channel.send(f'Текущий уровень **{comands[0]}**: **{level}**')
+        else: 
+            await message.channel.send('Команда имеет вид: **!level *{интересующее имя}* **')
+        # await message.channel.send(top)
+        # await message.channel.send(f"Также у вас еще куча заслуг:\n{''.join(other)}")
+        # top,*other=u_sc.get_medals()
+        # await message.channel.send('**Ваш текущий уровень:**')
+        # await message.channel.send(top)
+        # await message.channel.send(f"Также у вас еще куча заслуг:\n{''.join(other)}")
 
 @client.event
 async def on_raw_reaction_add(payload):

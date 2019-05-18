@@ -1,2 +1,3 @@
-python test/my_token.py
+python_test/my_token.py
 settings.json
+python_test/bot_modules/settings.py
