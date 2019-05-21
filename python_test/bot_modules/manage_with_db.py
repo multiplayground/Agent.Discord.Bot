@@ -17,7 +17,7 @@ def get_score (name):
         
         return score[0]
     except:
-        return 'something wrong'
+        return 'error'
 
 def set_score(name,level):
     name_=str(name)

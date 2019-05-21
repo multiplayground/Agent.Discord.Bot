@@ -15,10 +15,6 @@ import bot_modules.level_user_score as l_us
 
 channel_to_send=None
 connection=None
-initialized=0
-switch=True
-start_rebbit=False
-
 
 client=discord.Client()
 
@@ -36,24 +32,33 @@ async def on_message (message):
       
         
 
-    if message.content=='!':
+    if message.content=='|':
         print('=======',message.channel.id)
         channel_to_send= message.channel
         await message.delete()
+
+    if message.content=='!':
+        await message.channel.send("Список команд на данынй момент:\n\t\
+                                    !level    - узнать уровень пользователя в проекте\n\t\
+                                    |         - вызвать в чат лоадинг")
 
     if message.content.startswith('!level'):
         _,*comands=message.content.split()
         if comands:
             level = l_us.get_user_level(comands[0])
-            await message.channel.send(f'Текущий уровень **{comands[0]}**: **{level}**')
+            if level=='error':
+                msg="**Похоже этого пользователя еще нету в нашем списке**"
+            else:
+                msg=f'Текущий уровень **{comands[0]}**: **{level}**'
+            if '-p' in comands:
+                await message.author.send(msg)
+            else:
+                await message.channel.send(msg)
         else: 
-            await message.channel.send('Команда имеет вид: **!level *{интересующее имя}* **')
-        # await message.channel.send(top)
-        # await message.channel.send(f"Также у вас еще куча заслуг:\n{''.join(other)}")
-        # top,*other=u_sc.get_medals()
-        # await message.channel.send('**Ваш текущий уровень:**')
-        # await message.channel.send(top)
-        # await message.channel.send(f"Также у вас еще куча заслуг:\n{''.join(other)}")
+            await message.channel.send('Команда *level* имеет вид: *!level {интересующее имя} {аргументы}*\n\
+                                            \tСписок аргументов:\n\
+                                                  -p   - Ответ в личном сообщении')
+
 
 @client.event
 async def on_raw_reaction_add(payload):
