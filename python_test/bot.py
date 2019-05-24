@@ -15,6 +15,7 @@ import bot_modules.level_user_score as l_us
 
 channel_to_send=None
 connection=None
+initialized=0
 
 client=discord.Client()
 
@@ -37,7 +38,7 @@ async def on_message (message):
         channel_to_send= message.channel
         await message.delete()
 
-    if message.content=='!':
+    if message.content=='!do':
         await message.channel.send("Список команд на данынй момент:\n\t\
                                     !level    - узнать уровень пользователя в проекте\n\t\
                                     |         - вызвать в чат лоадинг")
@@ -84,7 +85,7 @@ async def on_ready():
     if initialized == 0:
         loop = asyncio.get_event_loop()
         loop.create_task(loading())
-        #loop.create_task(my_background_task(client))
+        loop.create_task(my_background_task(client))
         
         initialized = 1
 
@@ -92,7 +93,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(568791671764942868) 
+    channel_to_send = client.get_channel(571991415350099972) 
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id

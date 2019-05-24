@@ -74,10 +74,15 @@ async def my_background_task(client):
 
             with RpcClient(aHostName='157.230.108.47',aQueueName='Task.Discord.Tree') as rpcClient:
                 message = j
-                response = bytes(rpcClient.call(message),'utf-8')
-                fh = open(static+"/serv_sturct.png", "wb")
-                fh.write(base64.decodestring(response))
-                fh.close()
+                print('sended')
+                resp = rpcClient.call(message)
+                if resp == 'No response':
+                    pass
+                else:
+                    response = bytes(resp,'utf-8')
+                    fh = open(static+"/serv_sturct.png", "wb")
+                    fh.write(base64.decodestring(response))
+                    fh.close()
             
             await send_img(client.get_channel(571991415350099972),'serv_sturct.png')
             
