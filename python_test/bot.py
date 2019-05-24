@@ -56,7 +56,7 @@ async def on_message (message):
             else:
                 await message.channel.send(msg)
         else: 
-            await message.channel.send('Команда *level* имеет вид: *!level {интересующее имя} {аргументы}*\n\
+            await message.channel.send('Команда *level* имеет вид: !level *{интересующее имя} {аргументы}*\n\
                                             \tСписок аргументов:\n\
                                                   -p   - Ответ в личном сообщении')
 
@@ -85,7 +85,7 @@ async def on_ready():
     if initialized == 0:
         loop = asyncio.get_event_loop()
         loop.create_task(loading())
-        loop.create_task(my_background_task(client))
+        #loop.create_task(my_background_task(client))
         
         initialized = 1
 
@@ -93,7 +93,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(571991415350099972) 
+    channel_to_send = client.get_channel(568791671764942868) # 568791671764942868 -noisy tests 571991415350099972 - automaton
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id

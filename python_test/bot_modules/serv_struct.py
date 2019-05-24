@@ -66,11 +66,8 @@ async def my_background_task(client):
                 if key != 'None':
                     for chan in chans:
                         globals()[f'{key}'].AddChild(chan)
-                    
 
             j = tree.toJSON()
-            
-            
 
             with RpcClient(aHostName='157.230.108.47',aQueueName='Task.Discord.Tree') as rpcClient:
                 message = j

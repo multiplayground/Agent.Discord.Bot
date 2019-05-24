@@ -17,6 +17,7 @@ pika = "*"
 discord = "*"
 dill = "*"
 image = "*"
+graphene = "*"
 
 [requires]
 python_version = "3.7"
