@@ -2,7 +2,7 @@ import requests
 
 url = 'https://api.github.com/graphql'
 json = { 'query' : '{  repository(owner:"multiplayground", name:"mlp_api") {    issues(last:30, states:CLOSED) {      edges {        node { title     url      labels(first:5) { edges { node {  name   }   }   }   }   }  } }}' }
-api_token = "e9acd99b8d29542c37ae8c233006bdaae9578d8f"
+api_token = ""
 headers = {'Authorization': 'token %s' % api_token}
 
 r = requests.post(url=url, json=json, headers=headers)
