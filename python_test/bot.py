@@ -41,6 +41,7 @@ async def on_message (message):
     if message.content=='!do':
         await message.channel.send("Список команд на данынй момент:\n\t\
                                     !level    - узнать уровень пользователя в проекте\n\t\
+                                    #!git      - покажет статистику участия в проэкте на остнове git активности\n\t\
                                     |         - вызвать в чат лоадинг")
 
     if message.content.startswith('!level'):
@@ -60,6 +61,10 @@ async def on_message (message):
                                             \tСписок аргументов:\n\
                                                   -p   - Ответ в личном сообщении')
 
+    if message.content=='!git':
+        print('=======',message.channel.id)
+        channel_to_send= message.channel
+        await message.delete()
 
 @client.event
 async def on_raw_reaction_add(payload):
