@@ -52,8 +52,9 @@ def make_all_users_plot():
     ax = fig.add_subplot(111, projection='3d')
     months = mdates.MonthLocator()
     days = mdates.DayLocator()
-    colors =('orangered','orange','sienna','gold','royalbue','deepskyblue','blueviolet')
-    for i,name in enumerate(users_iseue):                               #  make histograms for users one by one
+    colors =('orangered','orange','sienna','gold','royalblue','deepskyblue','blueviolet')
+    for i,name in enumerate(users_iseue): 
+        print(i ,'in numerate')                              #  make histograms for users one by one
         color_to_bar=random.choice(colors)
         dates = [val[3][:10]  if val[3] else str(datetime.now())[:10]    #  deteckt dates when isue had finished
                 for val  in users_iseue[name]]                           #    and convert it to mpl_dates
@@ -90,7 +91,7 @@ def make_all_users_plot():
     ax.set_zlabel('заданий')
 
     ax.ticklabel_format
-    print(static+'/users_git_isues.png')
+    
     fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
     plt.savefig(static+'/users_git_isues.png')
     #plt.show()

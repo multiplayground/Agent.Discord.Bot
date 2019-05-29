@@ -73,8 +73,8 @@ async def on_message (message):
         else:
             await message.channel.send('Команда *git* имеет вид: !git *{аргументы}*\n\
                                                 \tСписок аргументов:\n\
-                                                    -is   - Колличество выполненых и взятых на выполнение задачь\
-                                                    \n\t   в графичесском представлении')
+                                                    -is   - Колличество выполненых и взятых на выполнение задачь\n\t\
+                                                          в графичесском представлении ')
         
 
 @client.event
@@ -101,7 +101,7 @@ async def on_ready():
     if initialized == 0:
         loop = asyncio.get_event_loop()
         loop.create_task(loading())
-        #loop.create_task(my_background_task(client))
+        loop.create_task(my_background_task(client))
         
         initialized = 1
 
@@ -109,7 +109,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(568791671764942868) # 568791671764942868 -noisy tests 571991415350099972 - automaton
+    channel_to_send = client.get_channel(571991415350099972) # 568791671764942868 -noisy tests 571991415350099972 - automaton
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id
@@ -119,10 +119,10 @@ async def loading():
             msg = await channel_to_send.send('\n\nstarting...')
             msg_id=msg.id
         msg = await channel_to_send.fetch_message(msg_id)
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n│')
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n╱')
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n━')
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n╲')
+        await msg.edit(content='\n\nMLP Bot v 0.0.3\n│')
+        await msg.edit(content='\n\nMLP Bot v 0.0.3\n╱')
+        await msg.edit(content='\n\nMLP Bot v 0.0.3\n━')
+        await msg.edit(content='\n\nMLP Bot v 0.0.3\n╲')
        
 
 

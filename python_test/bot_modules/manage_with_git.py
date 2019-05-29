@@ -48,9 +48,9 @@ def get_users_isues():
     isue['node']['state'],
     isue['node']['createdAt'],
     isue['node']['closedAt']]) 
-  for  isue in r['data']['repository']['issues']['edges'] if isue['node']['assignees']['edges'] ] 
-    
+    for  isue in r['data']['repository']['issues']['edges'] if isue['node']['assignees']['edges'] ] 
+  
   return users
 if __name__ == '__main__':
-  print(get_users_isues())
+  get_users_isues()
 
