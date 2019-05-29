@@ -72,6 +72,7 @@ async def my_background_task(client):
             with RpcClient(aHostName='157.230.108.47',aQueueName='Task.Discord.Tree') as rpcClient:
                 message = j
                 print('sended')
+                print(static)
                 resp = rpcClient.call(message)
                 if resp == 'No response':
                     pass
@@ -85,4 +86,7 @@ async def my_background_task(client):
             
             
         await asyncio.sleep(1)
+
+
+
         

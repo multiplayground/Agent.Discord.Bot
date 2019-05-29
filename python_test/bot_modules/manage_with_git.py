@@ -1,7 +1,7 @@
 import requests
 import json
 from collections import defaultdict
-
+from .settings import token
 
 def get_users_isues():
   url = 'https://api.github.com/graphql'
@@ -35,11 +35,12 @@ def get_users_isues():
   }
 }
   ''' }
-  api_token = "5bb1f6a35cb63d84390c2b0f274d260c7aa67d14"
+  api_token = token
   headers = {'Authorization': 'token %s' % api_token}
   r = json.loads(requests.post(url=url, json=json_, headers=headers).text)
   examples={'AlTheOne':{'isues':['one','two']}}
   users=defaultdict(list)
+  
   [users[edge['node']['login']] for  edge in r['data']['repository']['assignableUsers']['edges']]
 
   [users[isue['node']['assignees']['edges'][0]['node']['login']].append(

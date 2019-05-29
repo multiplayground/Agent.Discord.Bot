@@ -1,12 +1,15 @@
-import numpy as np
-import manage_with_git as git
-import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import numpy as np
+import os.path
+import random
 from matplotlib import cm
 from datetime import datetime
 from collections import defaultdict
-from mpl_toolkits.mplot3d import Axes3D 
+from mpl_toolkits.mplot3d import Axes3D
+from .manage_with_git import get_users_isues as u_is
 
+static=os.path.join(os.path.dirname(os.path.dirname(__file__)),'static')
 
 def make_user_plot(users_issue,user_name):
     
@@ -43,28 +46,60 @@ def make_user_plot(users_issue,user_name):
     # ax.bar(x,y,z,zdir='y')
     # plt.show()   
         
-def make_all_users_plot(users_iseue):
+def make_all_users_plot():
+    users_iseue =u_is()
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    nbins = 50
+    months = mdates.MonthLocator()
+    days = mdates.DayLocator()
+    colors =('orangered','orange','sienna','gold','royalbue','deepskyblue','blueviolet')
+    for i,name in enumerate(users_iseue):                               #  make histograms for users one by one
+        color_to_bar=random.choice(colors)
+        dates = [val[3][:10]  if val[3] else str(datetime.now())[:10]    #  deteckt dates when isue had finished
+                for val  in users_iseue[name]]                           #    and convert it to mpl_dates
+        datetime_object = [datetime.strptime(date, '%Y-%m-%d')           #    eache date represent an x value
+                for date in set(dates)]
+        mpl_dates = sorted(mdates.date2num(datetime_object))
+
+
+        hight = defaultdict(int)                                    #   calculate hight of bars 
+        for date in dates:                                          #   represent an z value
+            hight[date]+=1
+
+        color_map = list()                                          #   make color map
+        [color_map.append(color_to_bar) for date in mpl_dates ]
+        if color_map:
+            color_map[-1]='g'
+        
+        if len(mpl_dates):                                          # add hist only if it has values
+            print(mpl_dates,list(hight.values()),name)
+            ax.bar(mpl_dates,list(hight.values()),i,zdir='y',color = color_map ,alpha = 0.8)
+            ax.text(mpl_dates[-1]+4,i-0.1,0,name,color='maroon',zdir=None)
+            #ax.text2D(0.05, 0.95, "2D Text", transform=ax.transAxes)
+
+                                             
+    ax.xaxis.set_major_locator(months)                                         # set proper view of axis
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d %m %y'))
+    ax.xaxis.set_minor_locator(days)
     
-    for z in range(len(users_iseue)):
-        ys = np.random.normal(loc=10, scale=10, size=2000)
+    zticks = ax.zaxis.get_major_ticks() 
+    zticks[0].label1.set_visible(False)
+    plt.setp(ax.get_yticklabels(), visible=False)
 
-        hist, bins = np.histogram(ys)
-        xs = (bins[:-1] + bins[1:])/2
+    ax.set_xlabel('день')
+    ax.set_zlabel('заданий')
 
-        ax.bar(xs, hist, zs=z, zdir='y', alpha=0.8)
-
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-    plt.show()
+    ax.ticklabel_format
+    print(static+'/users_git_isues.png')
+    fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+    plt.savefig(static+'/users_git_isues.png')
+    #plt.show()
+    
 
 if __name__ == '__main__':
     
-    users_iseue =git.get_users_isues()
-    make_all_users_plot(users_iseue)
+    
+    make_all_users_plot()
     # for user in users_iseue:
     #     if users_iseue[user]:
     #         make_user_plot(users_iseue[user],user).show()

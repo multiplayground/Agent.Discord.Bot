@@ -1,14 +1,16 @@
-import discord
-import my_token
-import asyncio
-import json
-from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
-import bot_modules.make_api as api
-from bot_modules.send_img import send_img
-import bot_modules.manage_with_db as m_db
 import bot_modules.reaction_hendler as r_hd
 import bot_modules.medal_user_score as u_sc
 import bot_modules.level_user_score as l_us
+import bot_modules.manage_with_db as m_db
+import bot_modules.make_git as m_gi
+import bot_modules.make_api as api
+import my_token
+import discord
+import asyncio
+import json
+
+from bot_modules.send_img import send_img
+from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 
 
 
@@ -41,7 +43,7 @@ async def on_message (message):
     if message.content=='!do':
         await message.channel.send("Список команд на данынй момент:\n\t\
                                     !level    - узнать уровень пользователя в проекте\n\t\
-                                    #!git      - покажет статистику участия в проэкте на остнове git активности\n\t\
+                                    !git      - покажет статистику участия в проэкте на остнове git активности\n\t\
                                     |         - вызвать в чат лоадинг")
 
     if message.content.startswith('!level'):
@@ -61,10 +63,19 @@ async def on_message (message):
                                             \tСписок аргументов:\n\
                                                   -p   - Ответ в личном сообщении')
 
-    if message.content=='!git':
-        print('=======',message.channel.id)
-        channel_to_send= message.channel
-        await message.delete()
+    if message.content.startswith('!git'):
+        _,*comands=message.content.split()
+        print(comands)
+        if '-is' in comands:
+            print('git is')
+            m_gi.make_all_users_plot()
+            await send_img(message.channel,'users_git_isues.png')
+        else:
+            await message.channel.send('Команда *git* имеет вид: !git *{аргументы}*\n\
+                                                \tСписок аргументов:\n\
+                                                    -is   - Колличество выполненых и взятых на выполнение задачь\
+                                                    \n\t   в графичесском представлении')
+        
 
 @client.event
 async def on_raw_reaction_add(payload):
