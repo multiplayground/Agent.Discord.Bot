@@ -4,7 +4,7 @@ import bot_modules.level_user_score as l_us
 import bot_modules.manage_with_db as m_db
 import bot_modules.make_git as m_gi
 import bot_modules.make_api as api
-import my_token
+import my_tokens
 import discord
 import asyncio
 import json
@@ -109,7 +109,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(571991415350099972) # 568791671764942868 -noisy tests 571991415350099972 - automaton
+    channel_to_send = client.get_channel(568791671764942868) # 568791671764942868 -noisy tests 571991415350099972 - automaton
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id
@@ -126,5 +126,5 @@ async def loading():
        
 
 
-client.run(my_token.token)
+client.run(my_tokens.token)
 

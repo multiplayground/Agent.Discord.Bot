@@ -87,9 +87,7 @@ class RpcClient:
             ),
             body = message)
         while self._response is None:
-            self._connection.process_data_events(time_limit=5)
-            self._response = 'No response'
-        if self._response == 'No response':
-            return self._response
+            self._connection.process_data_events()
+            
         return self._response.decode('utf-8')
         
