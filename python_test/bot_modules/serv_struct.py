@@ -4,7 +4,7 @@ import pickle
 import base64
 import json
 from  .tree import *
-from .send_img import send_img
+from .send_img import Send_img
 from .Rpc_Client import RpcClient
 
 
@@ -39,7 +39,8 @@ async def my_background_task(client):
     #msg = await channel_to_send.fetch_message(572039983196536851)
     channels_str=None
     channel_tipes_1=None
-    struct_im = await send_img(client.get_channel(568791671764942868),'serv_sturct.png')
+    #struct_im = await send_img(client.get_channel(568791671764942868),'serv_sturct.png')
+    str_img = Send_img()
     while True:
         chan_per={}
         channel_tipes=[]
@@ -75,15 +76,16 @@ async def my_background_task(client):
                 print('sended')
                 print(static)
                 resp = rpcClient.call(message)
-                if resp == 'No response':
-                    pass
+                if resp == 'None':
+                    await str_img.del_img()
+                    await str_img.send_img(client.get_channel(568791671764942868),'serv_sturct.1.png')
                 else:
                     response = bytes(resp,'utf-8')
                     fh = open(static+"/serv_sturct.png", "wb")
                     fh.write(base64.decodestring(response))
                     fh.close()
-            
-            struct_im = await send_img(client.get_channel(568791671764942868),'serv_sturct.png')
+                    await str_img.del_img()
+                    await str_img.send_img(client.get_channel(568791671764942868),'serv_sturct.png')
             
             
         await asyncio.sleep(1)
