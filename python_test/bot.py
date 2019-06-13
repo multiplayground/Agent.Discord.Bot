@@ -1,14 +1,16 @@
-import discord
-import my_token
-import asyncio
-import json
-from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
-import bot_modules.make_api as api
-from bot_modules.send_img import send_img
-import bot_modules.manage_with_db as m_db
 import bot_modules.reaction_hendler as r_hd
 import bot_modules.medal_user_score as u_sc
 import bot_modules.level_user_score as l_us
+import bot_modules.manage_with_db as m_db
+import bot_modules.make_git as m_gi
+import bot_modules.make_api as api
+import my_tokens
+import discord
+import asyncio
+import json
+
+from bot_modules.send_img import send_img
+from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 
 
 
@@ -41,6 +43,7 @@ async def on_message (message):
     if message.content=='!do':
         await message.channel.send("Список команд на данынй момент:\n\t\
                                     !level    - узнать уровень пользователя в проекте\n\t\
+                                    !git      - покажет статистику участия в проэкте на остнове git активности\n\t\
                                     |         - вызвать в чат лоадинг")
 
     if message.content.startswith('!level'):
@@ -56,10 +59,23 @@ async def on_message (message):
             else:
                 await message.channel.send(msg)
         else: 
-            await message.channel.send('Команда *level* имеет вид: *!level {интересующее имя} {аргументы}*\n\
+            await message.channel.send('Команда *level* имеет вид: !level *{интересующее имя} {аргументы}*\n\
                                             \tСписок аргументов:\n\
                                                   -p   - Ответ в личном сообщении')
 
+    if message.content.startswith('!git'):
+        _,*comands=message.content.split()
+        print(comands)
+        if '-is' in comands:
+            print('git is')
+            m_gi.make_all_users_plot()
+            await send_img(message.channel,'users_git_isues.png')
+        else:
+            await message.channel.send('Команда *git* имеет вид: !git *{аргументы}*\n\
+                                                \tСписок аргументов:\n\
+                                                    -is   - Колличество выполненых и взятых на выполнение задачь\n\t\
+                                                          в графичесском представлении ')
+        
 
 @client.event
 async def on_raw_reaction_add(payload):
@@ -93,7 +109,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(571991415350099972) 
+    channel_to_send = client.get_channel(568791671764942868) # 568791671764942868 -noisy tests 571991415350099972 - automaton
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id
@@ -103,12 +119,12 @@ async def loading():
             msg = await channel_to_send.send('\n\nstarting...')
             msg_id=msg.id
         msg = await channel_to_send.fetch_message(msg_id)
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n│')
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n╱')
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n━')
-        await msg.edit(content='\n\nMLP Bot v 0.0.1\n╲')
+        await msg.edit(content='\n\nMLP Bot v 0.0.3\n│')
+        await msg.edit(content='\n\nMLP Bot v 0.0.3\n╱')
+        await msg.edit(content='\n\nMLP Bot v 0.0.3\n━')
+        await msg.edit(content='\n\nMLP Bot v 0.0.3\n╲')
        
 
 
-client.run(my_token.token)
+client.run(my_tokens.token)
 
