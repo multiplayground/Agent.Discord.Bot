@@ -9,7 +9,7 @@ import discord
 import asyncio
 import json
 
-from bot_modules.send_img import send_img
+from bot_modules.send_img import Send_img
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 
 
@@ -64,12 +64,13 @@ async def on_message (message):
                                                   -p   - Ответ в личном сообщении')
 
     if message.content.startswith('!git'):
+        git_img = Send_img()
         _,*comands=message.content.split()
         print(comands)
         if '-is' in comands:
             print('git is')
             m_gi.make_all_users_plot()
-            await send_img(message.channel,'users_git_isues.png')
+            await git_img.send_img(message.channel,'users_git_isues.png')
         else:
             await message.channel.send('Команда *git* имеет вид: !git *{аргументы}*\n\
                                                 \tСписок аргументов:\n\
