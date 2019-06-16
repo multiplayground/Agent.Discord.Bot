@@ -17,6 +17,10 @@ dill
 discord
 discord-py
 image
+graphene
+image
+matplotlib
+numpy
 pika
 psycopg2
 requests

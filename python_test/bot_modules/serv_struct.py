@@ -1,11 +1,11 @@
 import asyncio
-import json
-from .Rpc_Client import RpcClient
-import pickle
-from  .tree import *
-import base64
-from .send_img import send_img
 import os.path
+import pickle
+import base64
+import json
+from  .tree import *
+from .send_img import Send_img
+from .Rpc_Client import RpcClient
 
 
 
@@ -34,11 +34,13 @@ async def my_background_task(client):
     global channels_to_MQ
     await client.wait_until_ready()
     
-    channel_to_send = client.get_channel(571991415350099972) # 568791671764942868 -noisy tests 571991415350099972 - automaton
+    channel_to_send = client.get_channel(568791671764942868) # 568791671764942868 -noisy tests 571991415350099972 - automaton
     #msg = await channel_to_send.send('starting...')
     #msg = await channel_to_send.fetch_message(572039983196536851)
     channels_str=None
     channel_tipes_1=None
+    #struct_im = await send_img(client.get_channel(568791671764942868),'serv_sturct.png')
+    str_img = Send_img()
     while True:
         chan_per={}
         channel_tipes=[]
@@ -66,21 +68,28 @@ async def my_background_task(client):
                 if key != 'None':
                     for chan in chans:
                         globals()[f'{key}'].AddChild(chan)
-                    
 
             j = tree.toJSON()
-            
-            
 
             with RpcClient(aHostName='157.230.108.47',aQueueName='Task.Discord.Tree') as rpcClient:
                 message = j
-                response = bytes(rpcClient.call(message),'utf-8')
-                fh = open(static+"/serv_sturct.png", "wb")
-                fh.write(base64.decodestring(response))
-                fh.close()
-            
-            await send_img(client.get_channel(571991415350099972),'serv_sturct.png')
+                print('sended')
+                print(static)
+                resp = rpcClient.call(message)
+                if resp == 'None':
+                    await str_img.del_img()
+                    await str_img.send_img(client.get_channel(568791671764942868),'serv_sturct.1.png')
+                else:
+                    response = bytes(resp,'utf-8')
+                    fh = open(static+"/serv_sturct.png", "wb")
+                    fh.write(base64.decodestring(response))
+                    fh.close()
+                    await str_img.del_img()
+                    await str_img.send_img(client.get_channel(568791671764942868),'serv_sturct.png')
             
             
         await asyncio.sleep(1)
+
+
+
         

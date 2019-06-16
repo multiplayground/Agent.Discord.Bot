@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import pika
 import uuid
+#from collections import namedtuple
 
-class RpcClient:
+class RpcServer:
     _connection: pika.BlockingConnection
     _channel: pika.channel.Channel
 
@@ -12,9 +13,15 @@ class RpcClient:
     _queueName: str
     _user: str
     _pass: str
+    #__handlerReceivedJson
 
-    def __init__(self,aHostName: str = "localhost", aVirtualHost: str = "/", aPort: int = 5672,
-                    aQueueName: str = "rpc_queue",  aUser: str = "guest", aPass: str = "guest"):
+    def __init__(self, 
+                aHostName: str = "localhost",
+                aVirtualHost: str = "/",
+                aPort: int = 5672,
+                aQueueName: str = "rpc_queue",
+                aUser: str = "guest",
+                aPass: str = "guest"):
         # Constructor
         self._hostName = aHostName
         self._virtualHost = aVirtualHost
@@ -30,8 +37,6 @@ class RpcClient:
             self._queueName,
             self._user,
             self._pass)
-
-        self.CreateConsumer()
 
     def __enter__(self):
         # Prepare `with` context
@@ -61,35 +66,30 @@ class RpcClient:
                 )
             )
         channel = connection.channel()
+        channel.queue_declare(queue = aQueueName)
         return (connection, channel)
 
-    def on_response(self, ch, method, props, body):
-        if self._corr_id == props.correlation_id:
-            self._response = body
-
-    def CreateConsumer(self):
-        self._queue = self._channel.queue_declare('', exclusive=True)
-        self._callback_queue = self._queue.method.queue
-        self._channel.basic_consume(
-            queue=self._callback_queue,
-            on_message_callback=self.on_response,
-            auto_ack=True)
-
-    def call(self, message:str):
-        self._response = None
-        self._corr_id = str(uuid.uuid4())
-        self._channel.basic_publish(
-            exchange='',
-            routing_key = self._queueName,
-            properties=pika.BasicProperties(
-                reply_to=self._callback_queue,
-                correlation_id=self._corr_id,
-            ),
-            body = message)
-        while self._response is None:
-            self._connection.process_data_events(time_limit=5)
-            if self._response is None:
-                return 'None'
-            
-        return self._response.decode('utf-8')
+    def on_request(self, ch, method, props, body):
+        message = str(body.decode("utf-8"))
+        try:
+            response = self.__handlerReceivedJson(message)
+        except:
+            #https://stackoverflow.com/questions/2052390/manually-raising-throwing-an-exception-in-python
+            #https://docs.python.org/3/tutorial/errors.html#handling-exceptions
+            raise ValueError(f'HandlerReceivedJson:{HandlerReceivedJson} wrong, use Handler(message: str)->str, origanal error: {sys.exc_info()[0]}')
         
+        ch.basic_publish(exchange='',
+                         routing_key=props.reply_to,
+                         properties=pika.BasicProperties(correlation_id = \
+                                                             props.correlation_id),
+                         body=str(response))
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+
+    def CreateConsumer(self, aQueueName: str):
+        self._channel.basic_qos(prefetch_count=1)
+        self._channel.basic_consume(queue=aQueueName, on_message_callback = self.on_request)
+
+    def StartConsuming(self, aHandlerReceivedJson):
+        self.__handlerReceivedJson = aHandlerReceivedJson
+        self.CreateConsumer(self._queueName)
+        self._channel.start_consuming()

@@ -17,6 +17,9 @@ pika = "*"
 discord = "*"
 dill = "*"
 image = "*"
+graphene = "*"
+matplotlib = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.7"
