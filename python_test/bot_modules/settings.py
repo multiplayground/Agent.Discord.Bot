@@ -1,0 +1,5 @@
+db = 'base_datos'
+db_log='admin'
+db_pass='secret'
+db_host='157.230.108.47'
+token = '0722b32e032033d35572ac30cd848f67f92e27e2'
