@@ -44,18 +44,20 @@ async def my_background_task(client):
     while True:
         chan_per={}
         channel_tipes=[]
-        channel_type={0:'TextChannel',2:'VoiceChannel',4:'Category'}
+        channel_type={'text':'TextChannel','voice':'VoiceChannel','category':'Category'}
         tree = Node()
         tree.Data = DiscordNode("MLP Discord","root")
         channels= client.get_all_channels()
         
         for channel in sorted(channels,key=lambda x:x.position):
+                print(channel.name,channel.type,str(channel.type) )
+                
                 try: 
-                    chan_per[str(channel.category)].append(DiscordNode(channel.name,channel_type[channel._type],(channel.topic if channel._type == 0 else '')))
+                    chan_per[str(channel.category)].append(DiscordNode(channel.name,channel_type[str(channel.type)],(channel.topic if str(channel.type) == 'text' else '')))
                 except KeyError:
-                    chan_per.setdefault(str(channel.category),[]).append(DiscordNode(channel.name,channel_type[channel._type],(channel.topic if channel._type == 0 else '')))
+                    chan_per.setdefault(str(channel.category),[]).append(DiscordNode(channel.name,channel_type[str(channel.type)],(channel.topic if str(channel.type) == 'text' else '')))
                 channel_tipes.append(channel.name)
-                channel_tipes.append(channel.topic if channel._type == 0 else '')
+                channel_tipes.append(channel.topic if str(channel.type) == 'text' else '')
         
 
         if channel_tipes != channel_tipes_1 :
