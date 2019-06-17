@@ -34,12 +34,10 @@ async def my_background_task(client):
     global channels_to_MQ
     await client.wait_until_ready()
     
-    channel_to_send = client.get_channel(568791671764942868) # 568791671764942868 -noisy tests 571991415350099972 - automaton
-    #msg = await channel_to_send.send('starting...')
-    #msg = await channel_to_send.fetch_message(572039983196536851)
+    channel_to_send = client.get_channel(571991415350099972) # 568791671764942868 -noisy tests 571991415350099972 - automaton
     channels_str=None
     channel_tipes_1=None
-    #struct_im = await send_img(client.get_channel(568791671764942868),'serv_sturct.png')
+    
     str_img = Send_img()
     while True:
         chan_per={}
@@ -50,7 +48,6 @@ async def my_background_task(client):
         channels= client.get_all_channels()
         
         for channel in sorted(channels,key=lambda x:x.position):
-                print(channel.name,channel.type,str(channel.type) )
                 
                 try: 
                     chan_per[str(channel.category)].append(DiscordNode(channel.name,channel_type[str(channel.type)],(channel.topic if str(channel.type) == 'text' else '')))
@@ -80,14 +77,14 @@ async def my_background_task(client):
                 resp = rpcClient.call(message)
                 if resp == 'None':
                     await str_img.del_img()
-                    await str_img.send_img(client.get_channel(568791671764942868),'serv_sturct.1.png')
+                    await str_img.send_img(client.get_channel(571991415350099972),'serv_sturct.1.png')
                 else:
                     response = bytes(resp,'utf-8')
                     fh = open(static+"/serv_sturct.png", "wb")
                     fh.write(base64.decodestring(response))
                     fh.close()
                     await str_img.del_img()
-                    await str_img.send_img(client.get_channel(568791671764942868),'serv_sturct.png')
+                    await str_img.send_img(client.get_channel(571991415350099972),'serv_sturct.png')
             
             
         await asyncio.sleep(1)
