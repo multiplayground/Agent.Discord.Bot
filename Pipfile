@@ -7,12 +7,10 @@ verify_ssl = true
 pylint = "*"
 
 [packages]
-discord-py = "*"
 aiohttp = "*"
 requests = "*"
 connexion = {extras = ["swagger-ui"],version = "*"}
 aio-pika = "==5.5.2"
-psycopg2 = "*"
 pika = "*"
 discord = "*"
 dill = "*"
@@ -20,6 +18,8 @@ image = "*"
 graphene = "*"
 matplotlib = "*"
 numpy = "*"
+"discord.py" = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"
