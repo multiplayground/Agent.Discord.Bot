@@ -16,6 +16,7 @@ connexion
 dill
 discord
 discord-py
+image
 graphene
 image
 matplotlib
