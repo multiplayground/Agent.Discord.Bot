@@ -100,6 +100,7 @@ async def on_ready():
     print('Username: {0.name}\nID: {0.id}'.format(client.user))
 
     if initialized == 0:
+        
         loop = asyncio.get_event_loop()
         loop.create_task(loading())
         loop.create_task(my_background_task(client))
