@@ -100,6 +100,7 @@ async def on_ready():
     print('Username: {0.name}\nID: {0.id}'.format(client.user))
 
     if initialized == 0:
+        
         loop = asyncio.get_event_loop()
         loop.create_task(loading())
         loop.create_task(my_background_task(client))
@@ -110,7 +111,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(568791671764942868) # 568791671764942868 -noisy tests 571991415350099972 - automaton
+    channel_to_send = client.get_channel(571991415350099972) # 568791671764942868 -noisy tests 571991415350099972 - automaton
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id
