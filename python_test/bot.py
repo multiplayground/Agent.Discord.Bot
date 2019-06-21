@@ -1,3 +1,5 @@
+
+import bot_modules.post_news_module.get_news  as p_nw
 import bot_modules.reaction_hendler as r_hd
 import bot_modules.medal_user_score as u_sc
 import bot_modules.level_user_score as l_us
@@ -77,7 +79,12 @@ async def on_message (message):
                                                     -is   - Колличество выполненых и взятых на выполнение задачь\n\t\
                                                           в графичесском представлении ')
         
-
+    if message.content.startswith('!news'):
+        print(p_nw.secure_lab_news())
+        await message.channel.send('Пара случайных новостей Sequrity Lab за сегодня\n')
+        await message.channel.send(str(p_nw.secure_lab_news()[0]))
+        await message.channel.send(str(p_nw.secure_lab_news()[1]))
+    
 @client.event
 async def on_raw_reaction_add(payload):
     user_id=payload.user_id
@@ -111,7 +118,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(571991415350099972) # 568791671764942868 -noisy tests 571991415350099972 - automaton
+    channel_to_send = client.get_channel(568791671764942868) # 568791671764942868 -noisy tests 571991415350099972 - automaton
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id

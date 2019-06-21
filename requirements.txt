@@ -12,13 +12,14 @@
 
 aio-pika==5.5.2
 aiohttp
+beautifulsoup4
 connexion
 dill
 discord
-discord-py
-image
+discord.py
 graphene
 image
+lxml
 matplotlib
 numpy
 pika
