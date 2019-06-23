@@ -81,9 +81,9 @@ async def on_message (message):
         
     if message.content.startswith('!news'):
         print(p_nw.secure_lab_news())
-        await message.channel.send('Пара случайных новостей Sequrity Lab за сегодня\n')
-        await message.channel.send(str(p_nw.secure_lab_news()[0]))
-        await message.channel.send(str(p_nw.secure_lab_news()[1]))
+        await message.channel.send('  **Один из лучших постов Хабр за сегодня**\n')
+        await message.channel.send(p_nw.habr_news())
+        
     
 @client.event
 async def on_raw_reaction_add(payload):
@@ -108,9 +108,9 @@ async def on_ready():
 
     if initialized == 0:
         
-        loop = asyncio.get_event_loop()
-        loop.create_task(loading())
-        loop.create_task(my_background_task(client))
+        # loop = asyncio.get_event_loop()
+        # loop.create_task(loading())
+        # loop.create_task(my_background_task(client))
         
         initialized = 1
 
