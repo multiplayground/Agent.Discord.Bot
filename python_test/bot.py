@@ -111,7 +111,7 @@ async def on_ready():
         
         loop = asyncio.get_event_loop()
         loop.create_task(loading())
-        # loop.create_task(my_background_task(client))
+        loop.create_task(my_background_task(client))
         loop.create_task(post_news(client))
         
         initialized = 1
