@@ -1,3 +1,5 @@
+
+import bot_modules.post_news_module.get_news  as p_nw
 import bot_modules.reaction_hendler as r_hd
 import bot_modules.medal_user_score as u_sc
 import bot_modules.level_user_score as l_us
@@ -10,6 +12,7 @@ import asyncio
 import json
 
 from bot_modules.send_img import Send_img
+from bot_modules.post_news_module.post_news import post_news
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 
 
@@ -77,7 +80,12 @@ async def on_message (message):
                                                     -is   - Колличество выполненых и взятых на выполнение задачь\n\t\
                                                           в графичесском представлении ')
         
-
+    if message.content.startswith('!news'):
+        print(p_nw.secure_lab_news())
+        await message.channel.send('  **Случайна новость с Tproger за сегодня**\n')
+        await message.channel.send(p_nw.tproger_news())
+        
+    
 @client.event
 async def on_raw_reaction_add(payload):
     user_id=payload.user_id
@@ -100,17 +108,19 @@ async def on_ready():
     print('Username: {0.name}\nID: {0.id}'.format(client.user))
 
     if initialized == 0:
+        
         loop = asyncio.get_event_loop()
         loop.create_task(loading())
         loop.create_task(my_background_task(client))
+        loop.create_task(post_news(client))
         
         initialized = 1
 
 
 async def loading():
     global channel_to_send
-    await client.wait_until_ready()
-    channel_to_send = client.get_channel(568791671764942868) # 568791671764942868 -noisy tests 571991415350099972 - automaton
+    #await client.wait_until_ready()
+    channel_to_send = client.get_channel(571991415450099972) # 568791671764942868 -noisy tests 571991415450099972 - automaton
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id
@@ -120,10 +130,10 @@ async def loading():
             msg = await channel_to_send.send('\n\nstarting...')
             msg_id=msg.id
         msg = await channel_to_send.fetch_message(msg_id)
-        await msg.edit(content='\n\nMLP Bot v 0.0.3\n│')
-        await msg.edit(content='\n\nMLP Bot v 0.0.3\n╱')
-        await msg.edit(content='\n\nMLP Bot v 0.0.3\n━')
-        await msg.edit(content='\n\nMLP Bot v 0.0.3\n╲')
+        await msg.edit(content='\n\nMLP Bot v 0.0.4\n│')
+        await msg.edit(content='\n\nMLP Bot v 0.0.4\n╱')
+        await msg.edit(content='\n\nMLP Bot v 0.0.4\n━')
+        await msg.edit(content='\n\nMLP Bot v 0.0.4\n╲')
        
 
 
