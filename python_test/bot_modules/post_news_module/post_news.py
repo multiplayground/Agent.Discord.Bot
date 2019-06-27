@@ -1,5 +1,6 @@
 import numpy as np
 import asyncio
+import random
 import time
 
 from . import get_news
@@ -11,33 +12,34 @@ async def post_news(client):
     """ Function that calculate random time to post news and post it"""
     await client.wait_until_ready()
     today_date = None
-    channels_to_post = (566337001167519756,566340765656154132,567017783515283496,
+    channels_to_post = (566337001167519756,566340765656154132,567017783515283496,566322218213048331,
                         567313449361735681,571290970906165249,570631337443328000,571255135284625428)
-    news_to_send = (get_news.secure_lab_news,get_news.habr_news,get_news.tproger_news)
+    
     while (True):
-        today_time = datetime.today().replace(second = 0)
+        today_time = datetime.today().replace(second = 0,microsecond = 0)  # time to compare with set of random times to post
 
-        if today_date != datetime.today().date(): 
+        if today_date != datetime.today().date():  # one time per day reset the set of random times to post and renew set of posts
+            
+            news_to_send = [get_news.secure_lab_news(), get_news.habr_news(), get_news.tproger_news()]  #set of post to be poped to post
+            
             today = datetime.today()
             today_date = today.date()
-            today_start = today.replace(hour = 15, minute = 00)
+            today_start = today # have been replace to 15 00
             unixtime_start = time.mktime(today_start.timetuple()) # convert to unix for add random shift
-
-            random_time_shift = np.random.randint(25200, size = 3)  #shift for calculate random times since today_start time
+            
+            random_time_shift = np.random.randint(300, size = 3) #25200 #shift for calculate random times since today_start time
 
             unix_time_to_post = random_time_shift+unixtime_start  
             times_to_post = [datetime.fromtimestamp(time_.item()).replace(second = 0) for time_ in unix_time_to_post] #convert times with shifts to datetime
-        
+            
         if today_time in times_to_post:
-            i=0
-            client.get_channel(random.chois(channels_to_post)).send(news_to_send[i])
-            i+=1
+            
+            times_to_post.remove(today_time)
+            await client.get_channel(random.choice(channels_to_post)).send(news_to_send.pop()) # pop out message to random channel
         
-        
-
         await asyncio.sleep(10)
     
-    #return datetime.datetime.now()
+
     
 
 if __name__ == '__main__':

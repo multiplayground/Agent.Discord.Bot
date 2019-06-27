@@ -38,7 +38,6 @@ def habr_news ():
     resp = requests.get(habr_top_daily_post)
     all_posts = BeautifulSoup (resp.content , 'lxml').find_all('item')
     random_post = random.choice(all_posts)
-    print ('\n\n\n\n\n\n\n==========\n\n\n\n\n\n\n',random_post,random_post.title.next_sibling.next_sibling,random_post.link.next_sibling)
     return random_post.link.next_sibling
 
 def tproger_news():
