@@ -5,10 +5,10 @@ from datetime import datetime,timedelta
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
 
-today = datetime.today().date()
+
 def secure_lab_news ():
     """Get posts from Security Lab and return two random news in a discored message format"""
-    global today
+    today = datetime.today().date()
 
     secur_lab_news_url = 'https://www.securitylab.ru/_services/export/rss/news/'
     secur_lab_vul_url = 'https://www.securitylab.ru/_services/export/rss/vulnerabilities/'
@@ -41,7 +41,7 @@ def habr_news ():
     return random_post.link.next_sibling
 
 def tproger_news():
-    global today
+    today = datetime.today().date()
 
     tprog_news_link = 'https://tproger.ru/feed/'
     resp = requests.get(tprog_news_link)
