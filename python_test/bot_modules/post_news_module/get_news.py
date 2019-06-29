@@ -28,7 +28,7 @@ def secure_lab_news ():
     one_news = [random.choice(i) for i in [todays_news_post,todays_vul_post] if i  ]
     if one_news:
         line  =['\n'.join(i) for i in one_news]
-        res = 'Пара новостей Security lab на сегодня'+'\n'.join (line) 
+        res = 'Пара новостей Security lab на сегодня\n'+'\n'.join (line) 
     else:
         res = 'Похоже на сегодня новостей еще не набралось'
     
@@ -42,7 +42,7 @@ def habr_news ():
     random_post = random.choice(all_posts)
     mes = random_post.link.next_sibling
 
-    return 'Одна из интересных статей Хабра на сегодня' + mes
+    return 'Одна из интересных статей Хабра на сегодня\n' + mes
 
 def tproger_news():
     today = datetime.today().date()
@@ -55,7 +55,7 @@ def tproger_news():
                             if parse(msg.pubdate.text).date() == today  ]
     
     if tprog_todays_news:
-        msg = 'Новости с Tproger за сегодня'+ '\n'.join(random.choice(tprog_todays_news))
+        msg = 'Новости с Tproger за сегодня\n'+ '\n'.join(random.choice(tprog_todays_news))
     else:
         msg = 'Похоже на сегодня нет достойных новостей'
     return msg
