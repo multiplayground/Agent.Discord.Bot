@@ -31,9 +31,8 @@ async def post_news(client):
 
             unix_time_to_post = random_time_shift+unixtime_start  
             times_to_post = [datetime.fromtimestamp(time_.item()).replace(second = 0) for time_ in unix_time_to_post] #convert times with shifts to datetime
-            print([i for i in times_to_post])
+            await client.get_user(306146990440579084).send([i for i in times_to_post])
         if today_time in times_to_post:
-            
             times_to_post.remove(today_time)
             await client.get_channel(random.choice(channels_to_post)).send(news_to_send.pop()) # pop out message to random channel
         

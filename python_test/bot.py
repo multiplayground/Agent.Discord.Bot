@@ -85,6 +85,11 @@ async def on_message (message):
         await message.channel.send('  **Случайна новость с Tproger за сегодня**\n')
         await message.channel.send(p_nw.tproger_news())
         
+    if message.content == '!!':
+        
+        chant_id = message.channel.id
+        author_id =message.author.id
+        await client.get_user(306146990440579084).send(f'fron chat: {chant_id}\nfrom author:{author_id}')
     
 @client.event
 async def on_raw_reaction_add(payload):
@@ -110,8 +115,8 @@ async def on_ready():
     if initialized == 0:
         
         loop = asyncio.get_event_loop()
-        loop.create_task(loading())
-        loop.create_task(my_background_task(client))
+        # loop.create_task(loading())
+        # loop.create_task(my_background_task(client))
         loop.create_task(post_news(client))
         
         initialized = 1
