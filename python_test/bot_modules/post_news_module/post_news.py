@@ -24,7 +24,7 @@ async def post_news(client):
             
             today = datetime.today()
             today_date = today.date()
-            today_start = today.replace(hour = 15, minute = 0) # have been replace to 15 00
+            today_start = today.replace(hour = 12, minute = 0) # have been replace to 15 00
             unixtime_start = time.mktime(today_start.timetuple()) # convert to unix for add random shift
             
             random_time_shift = np.random.randint(25200, size = 3) #25200 #shift for calculate random times since today_start time
