@@ -19,9 +19,9 @@ graphene = "*"
 matplotlib = "*"
 numpy = "*"
 "discord.py" = "*"
-psycopg2 = "*"
 beautifulsoup4 = "*"
 lxml = "*"
+bpy = "*"
 
 [requires]
 python_version = "3.7"
