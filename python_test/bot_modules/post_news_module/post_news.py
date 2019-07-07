@@ -34,7 +34,7 @@ async def post_news(client):
             await client.get_user(306146990440579084).send([i for i in times_to_post])
         if today_time in times_to_post:
             times_to_post.remove(today_time)
-            send_news(client,random.choice(channels_to_post),news_to_send.pop())
+            await send_news(client,random.choice(channels_to_post),news_to_send.pop())
             #await client.get_channel(random.choice(channels_to_post)).send(news_to_send.pop()) # pop out message to random channel
         
         await asyncio.sleep(10)

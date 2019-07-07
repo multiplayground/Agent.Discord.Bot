@@ -21,6 +21,7 @@ numpy = "*"
 "discord.py" = "*"
 beautifulsoup4 = "*"
 lxml = "*"
+setuptools = "*"
 bpy = "*"
 
 [requires]
