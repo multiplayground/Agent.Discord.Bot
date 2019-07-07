@@ -1,5 +1,6 @@
 
-import bot_modules.post_news_module.get_news  as p_nw
+
+import bot_modules.post_news_module.post_news  as p_nw
 import bot_modules.reaction_hendler as r_hd
 import bot_modules.medal_user_score as u_sc
 import bot_modules.level_user_score as l_us
@@ -12,7 +13,7 @@ import asyncio
 import json
 
 from bot_modules.send_img import Send_img
-from bot_modules.post_news_module.post_news import post_news
+from bot_modules.post_news_module.post_news import post_news,send_news
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 
 
@@ -46,6 +47,7 @@ async def on_message (message):
     if message.content=='!do':
         await message.channel.send("Список команд на данынй момент:\n\t\
                                     !level    - узнать уровень пользователя в проекте\n\t\
+                                    !news     - чтобы узнать побольше интересного\
                                     !git      - покажет статистику участия в проэкте на остнове git активности\n\t\
                                     |         - вызвать в чат лоадинг")
 
@@ -81,10 +83,22 @@ async def on_message (message):
                                                           в графичесском представлении ')
         
     if message.content.startswith('!news'):
-        print(p_nw.secure_lab_news())
-        await message.channel.send('  **Случайна новость с Tproger за сегодня**\n')
-        await message.channel.send(p_nw.tproger_news())
+        _,*comands=message.content.split()
+        if not comands:
+             await message.channel.send('Команда *news* имеет вид: !news *{аргументы}*\n\
+                                                \tСписок аргументов:\n\
+                                                    --more   - Запостить еще одну случайную сегодняшнюю новость')
+        if '--more' in comands:
+            await message.channel.send('  **Еще одна случайная новость не будет лишней**\n')
+            await p_nw.more_news(client,message.channel.id)
+       
         
+        
+    if message.content == '!!':
+        
+        chant_id = message.channel.id
+        author_id =message.author.id
+        await client.get_user(306146990440579084).send(f'fron chat: {chant_id}\nfrom author:{author_id}')
     
 @client.event
 async def on_raw_reaction_add(payload):
@@ -112,7 +126,7 @@ async def on_ready():
         loop = asyncio.get_event_loop()
         loop.create_task(loading())
         loop.create_task(my_background_task(client))
-        loop.create_task(post_news(client))
+        loop.create_task(p_nw.post_news(client))
         
         initialized = 1
 
