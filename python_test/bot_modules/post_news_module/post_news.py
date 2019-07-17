@@ -20,7 +20,7 @@ async def post_news(client):
 
         if today_date != datetime.today().date():  # one time per day reset the set of random times to post and renew set of posts
             
-            news_to_send = [get_news.secure_lab_news(), get_news.habr_news(), get_news.tproger_news()]  #set of post to be poped to post
+            news_to_send = ['get_news.secure_lab_news()', 'get_news.habr_news()', 'get_news.tproger_news()']  #set of post to be poped to post
             
             today = datetime.today()
             today_date = today.date()
@@ -33,15 +33,14 @@ async def post_news(client):
             times_to_post = [datetime.fromtimestamp(time_.item()).replace(second = 0) for time_ in unix_time_to_post] #convert times with shifts to datetime
             await client.get_user(306146990440579084).send([i for i in times_to_post])
         if today_time in times_to_post:
-            times_to_post.remove(today_time)
-            await send_news(client,random.choice(channels_to_post),news_to_send.pop())
-            #await client.get_channel(random.choice(channels_to_post)).send(news_to_send.pop()) # pop out message to random channel
+            times_to_post.remove(today_time)            
+            await send_news(client,random.choice(channels_to_post), eval(news_to_send.pop())) # pop out message to random channel
         
         await asyncio.sleep(10)
     
 async def more_news (client,channel):
-    news_to_send = [get_news.secure_lab_news(), get_news.habr_news(), get_news.tproger_news()]
-    await send_news(client,channel,random.choice(news_to_send))
+    news_to_send = ['get_news.secure_lab_news()', 'get_news.habr_news()', 'get_news.tproger_news()']
+    await send_news(client,channel,eval(random.choice(news_to_send)))
 
     
 async def send_news (client,channel,news):
