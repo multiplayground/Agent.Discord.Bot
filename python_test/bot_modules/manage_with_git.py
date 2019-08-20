@@ -1,7 +1,7 @@
 import requests
 import json
 from collections import defaultdict
-from .settings import token
+from my_tokens import git_token
 
 def get_users_isues():
   url = 'https://api.github.com/graphql'
@@ -35,7 +35,7 @@ def get_users_isues():
   }
 }
   ''' }
-  api_token = token
+  api_token = git_token
   headers = {'Authorization': 'token %s' % api_token}
   r = json.loads(requests.post(url=url, json=json_, headers=headers).text)
   examples={'AlTheOne':{'isues':['one','two']}}

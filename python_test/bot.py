@@ -7,6 +7,7 @@ import bot_modules.level_user_score as l_us
 import bot_modules.manage_with_db as m_db
 import bot_modules.make_git as m_gi
 import bot_modules.make_api as api
+import channels_module                               #import id of channels exists on server
 import my_tokens
 import discord
 import asyncio
@@ -15,7 +16,6 @@ import json
 from bot_modules.send_img import Send_img
 from bot_modules.post_news_module.post_news import post_news,send_news
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
-
 
 
 
@@ -37,8 +37,6 @@ async def on_message (message):
     if message.content.startswith('hello'):
         await message.channel.send('Hello')
       
-        
-
     if message.content=='|':
         print('=======',message.channel.id)
         channel_to_send= message.channel
@@ -47,7 +45,7 @@ async def on_message (message):
     if message.content=='!do':
         await message.channel.send("Список команд на данынй момент:\n\t\
                                     !level    - узнать уровень пользователя в проекте\n\t\
-                                    !news     - чтобы узнать побольше интересного\
+                                    !news     - чтобы узнать побольше интересного\n\t\
                                     !git      - покажет статистику участия в проэкте на остнове git активности\n\t\
                                     |         - вызвать в чат лоадинг")
 
@@ -91,14 +89,13 @@ async def on_message (message):
         if '--more' in comands:
             await message.channel.send('  **Еще одна случайная новость не будет лишней**\n')
             await p_nw.more_news(client,message.channel.id)
-       
         
-        
-    if message.content == '!!':
-        
+    if message.content == '?':
         chant_id = message.channel.id
         author_id =message.author.id
-        await client.get_user(306146990440579084).send(f'fron chat: {chant_id}\nfrom author:{author_id}')
+        channle_ = message.channel
+        print(chant_id,channle_)
+        # await client.get_user(306146990440579084).send(f'fron chat: {chant_id}\nfrom author:{author_id}')
     
 @client.event
 async def on_raw_reaction_add(payload):
@@ -134,7 +131,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(571991415350099972) # 568791671764942868 -noisy tests 571991415450099972 - automaton
+    channel_to_send = client.get_channel(channels_module.automaton)
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id
@@ -151,5 +148,5 @@ async def loading():
        
 
 
-client.run(my_tokens.token)
+client.run(my_tokens.disc_bot_token)
 

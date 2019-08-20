@@ -1,3 +1,4 @@
+import channels_module                               #import id of channels exists on server
 import asyncio
 import os.path
 import pickle
@@ -34,7 +35,7 @@ async def my_background_task(client):
     global channels_to_MQ
     await client.wait_until_ready()
     
-    channel_to_send = client.get_channel(571991415350099972) # 568791671764942868 -noisy tests 571991415350099972 - automaton
+    channel_to_send = client.get_channel(channels_module.automaton) # 612647128442863666 -noisy tests 603536353313161256 - automaton
     channels_str=None
     channel_tipes_1=None
     
@@ -77,14 +78,14 @@ async def my_background_task(client):
                 resp = rpcClient.call(message)
                 if resp == 'None':
                     await str_img.del_img()
-                    await str_img.send_img(client.get_channel(571991415350099972),'serv_sturct.1.png')
+                    await str_img.send_img(client.get_channel(channels_module.automaton),'serv_sturct.1.png')
                 else:
                     response = bytes(resp,'utf-8')
                     fh = open(static+"/serv_sturct.png", "wb")
                     fh.write(base64.decodestring(response))
                     fh.close()
                     await str_img.del_img()
-                    await str_img.send_img(client.get_channel(571991415350099972),'serv_sturct.png')
+                    await str_img.send_img(client.get_channel(channels_module.automaton),'serv_sturct.png')
             
             
         await asyncio.sleep(1)
