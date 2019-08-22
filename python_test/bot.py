@@ -8,10 +8,10 @@ import bot_modules.manage_with_db as m_db
 import bot_modules.make_git as m_gi
 import bot_modules.make_api as api
 import channels_module                               #import id of channels exists on server
-import my_tokens
 import discord
 import asyncio
 import json
+import os
 
 from bot_modules.send_img import Send_img
 from bot_modules.post_news_module.post_news import post_news,send_news
@@ -147,6 +147,5 @@ async def loading():
         await msg.edit(content='\n\nMLP Bot v 0.0.4\n╲')
        
 
-
-client.run(my_tokens.disc_bot_token)
+client.run(os.environ['MLP_BOT'])
 
