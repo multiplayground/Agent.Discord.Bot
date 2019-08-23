@@ -1,13 +1,13 @@
 
-
 import bot_modules.post_news_module.post_news  as p_nw
 import bot_modules.reaction_hendler as r_hd
-import bot_modules.medal_user_score as u_sc
-import bot_modules.level_user_score as l_us
-import bot_modules.manage_with_db as m_db
+# import bot_modules.medal_user_score as u_sc
+# import bot_modules.level_user_score as l_us
+# import bot_modules.manage_with_db as m_db
 import bot_modules.make_git as m_gi
 import bot_modules.make_api as api
 import channels_module                               #import id of channels exists on server
+import logging
 import discord
 import asyncio
 import json
@@ -17,6 +17,15 @@ from bot_modules.send_img import Send_img
 from bot_modules.post_news_module.post_news import post_news,send_news
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 
+
+
+logging.basicConfig(filename=logname,
+                            filemode='a',
+                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                            datefmt='%H:%M:%S',
+                            level=logging.DEBUG)
+
+logging.info("Running Urban Planning")
 
 
 channel_to_send=None
@@ -131,7 +140,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(channels_module.automaton)
+    channel_to_send = client.get_channel(channels_module.noisy_tests)
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id
