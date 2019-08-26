@@ -1,9 +1,6 @@
 
 import bot_modules.post_news_module.post_news  as p_nw
 import bot_modules.reaction_hendler as r_hd
-# import bot_modules.medal_user_score as u_sc
-# import bot_modules.level_user_score as l_us
-# import bot_modules.manage_with_db as m_db
 import bot_modules.make_git as m_gi
 import bot_modules.make_api as api
 import channels_module                               #import id of channels exists on server
@@ -84,7 +81,8 @@ async def on_message (message):
         if not comands:
              await message.channel.send('Команда *news* имеет вид: !news *{аргументы}*\n\
                                                 \tСписок аргументов:\n\
-                                                    --more   - Запостить еще одну случайную сегодняшнюю новость')
+                                                    --more    - Запостить еще одну случайную сегодняшнюю новость\n\t\
+                                                    --where   - Показывает вероятность попадания новости на определенный канал')
         if '--more' in comands:
             await message.channel.send('  **Еще одна случайная новость не будет лишней**\n')
             await p_nw.more_news(client,message.channel.id)

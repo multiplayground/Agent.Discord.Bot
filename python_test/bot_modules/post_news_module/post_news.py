@@ -1,10 +1,12 @@
-import channels_module
+
 import numpy as np
 import asyncio
 import random
 import time
 
+
 from . import get_news
+from . import chanels_to_send
 from datetime import datetime,timedelta
 
 
@@ -13,10 +15,8 @@ async def post_news(client):
     """ Function that calculate random time to post news and post it"""
     await client.wait_until_ready()
     today_date = None
-    channels_to_post = (channels_module.discussion_busines,channels_module.discussion_ceres,channels_module.discussion_disc_bot
-                        ,channels_module.discussion_gen_chat,channels_module.discussion_mlp_core
-                        ,channels_module.discussion_web_site)
-    
+    channels_to_post = chanels_to_send.channels_to_post
+    print(channels_to_post)
     while (True):
         today_time = datetime.today().replace(second = 0,microsecond = 0)  # time to compare with set of random times to post
 
