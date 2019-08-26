@@ -18,16 +18,6 @@ from bot_modules.post_news_module.post_news import post_news,send_news
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 
 
-
-logging.basicConfig(filename=logname,
-                            filemode='a',
-                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                            datefmt='%H:%M:%S',
-                            level=logging.DEBUG)
-
-logging.info("Running Urban Planning")
-
-
 channel_to_send=None
 connection=None
 initialized=0
@@ -106,20 +96,20 @@ async def on_message (message):
         print(chant_id,channle_)
         # await client.get_user(306146990440579084).send(f'fron chat: {chant_id}\nfrom author:{author_id}')
     
-@client.event
-async def on_raw_reaction_add(payload):
-    user_id=payload.user_id
+# @client.event
+# async def on_raw_reaction_add(payload):
+#     user_id=payload.user_id
 
-    guild=client.get_guild(payload.guild_id)
-    member=guild.get_member(user_id)    
-    roles=[str(role) for role in member.roles]
+#     guild=client.get_guild(payload.guild_id)
+#     member=guild.get_member(user_id)    
+#     roles=[str(role) for role in member.roles]
 
-    emoji=payload.emoji.name
+#     emoji=payload.emoji.name
     
     
-    print(payload.emoji.id)
-    if 'DiscordAdmin' or 'Curator' in roles:
-        await r_hd.deal_with_reaciton(payload)
+#     print(payload.emoji.id)
+#     if 'DiscordAdmin' or 'Curator' in roles:
+#         await r_hd.deal_with_reaciton(payload)
         
 @client.event
 async def on_ready():
@@ -140,7 +130,7 @@ async def on_ready():
 async def loading():
     global channel_to_send
     await client.wait_until_ready()
-    channel_to_send = client.get_channel(channels_module.noisy_tests)
+    channel_to_send = client.get_channel(channels_module.automaton)
     msg = await channel_to_send.send('starting...')
     
     msg_id=msg.id
