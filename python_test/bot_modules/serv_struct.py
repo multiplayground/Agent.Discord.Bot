@@ -1,4 +1,5 @@
-import channels_module                               #import id of channels exists on server
+import channels_module    
+import settings                           #import id of channels exists on server
 import asyncio
 import os.path
 import pickle
@@ -78,14 +79,14 @@ async def my_background_task(client):
                 resp = rpcClient.call(message)
                 if resp == 'None':
                     await str_img.del_img()
-                    await str_img.send_img(client.get_channel(channels_module.automaton),'serv_sturct.1.png')
+                    await str_img.send_img(client.get_channel(settings.main_channel),'serv_sturct.1.png')
                 else:
                     response = bytes(resp,'utf-8')
                     fh = open(static+"/serv_sturct.png", "wb")
                     fh.write(base64.decodestring(response))
                     fh.close()
                     await str_img.del_img()
-                    await str_img.send_img(client.get_channel(channels_module.automaton),'serv_sturct.png')
+                    await str_img.send_img(client.get_channel(settings.main_channel),'serv_sturct.png')
             
             
         await asyncio.sleep(1)

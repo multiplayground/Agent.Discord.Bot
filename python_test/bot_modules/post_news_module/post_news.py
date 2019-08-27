@@ -17,6 +17,8 @@ async def post_news(client):
     today_date = None
     channels_to_post = chanels_to_send.channels_to_post
     print(channels_to_post)
+    for i in range (100):
+        print(random.choice(channels_to_post))
     while (True):
         today_time = datetime.today().replace(second = 0,microsecond = 0)  # time to compare with set of random times to post
 
