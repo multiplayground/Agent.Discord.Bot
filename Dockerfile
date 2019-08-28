@@ -1,6 +1,7 @@
 FROM python:3.7
+
 ENV MLP_BOT=${MLP_BOT}
-ENV MLP_BOTGIT=${MLP_GIT}
+ENV MLP_GIT=${MLP_GIT}
 RUN mkdir /code
 WORKDIR /code
 ADD . /code

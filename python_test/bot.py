@@ -77,8 +77,7 @@ async def on_message (message):
         if not comands:
              await message.channel.send('Команда *news* имеет вид: !news *{аргументы}*\n\
                                                 \tСписок аргументов:\n\
-                                                    --more    - Запостить еще одну случайную сегодняшнюю новость\n\t\
-                                                    --where   - Показывает вероятность попадания новости на определенный канал')
+                                                    --more    - Запостить еще одну случайную сегодняшнюю новость')
         if '--more' in comands:
             await message.channel.send('  **Еще одна случайная новость не будет лишней**\n')
             await p_nw.more_news(client,message.channel.id)
