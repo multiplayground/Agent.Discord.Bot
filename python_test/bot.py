@@ -24,8 +24,6 @@ async def on_message (message):
     global channel_to_send
     global received
     global switch
-    global start_rebbit
-    print (message.content,message.id,message.channel,message.attachments)
 
 
     if message.content.startswith('hello'):
