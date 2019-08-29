@@ -1,7 +1,8 @@
 import requests
 import json
+import os
 from collections import defaultdict
-from .settings import token
+
 
 def get_users_isues():
   url = 'https://api.github.com/graphql'
@@ -35,7 +36,7 @@ def get_users_isues():
   }
 }
   ''' }
-  api_token = token
+  api_token = os.environ['MLP_GIT']
   headers = {'Authorization': 'token %s' % api_token}
   r = json.loads(requests.post(url=url, json=json_, headers=headers).text)
   examples={'AlTheOne':{'isues':['one','two']}}

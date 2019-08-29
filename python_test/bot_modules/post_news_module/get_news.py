@@ -30,7 +30,7 @@ def secure_lab_news ():
         line  =['\n'.join(i) for i in one_news]
         res = 'Пара новостей Security lab на сегодня\n'+'\n'.join (line) 
     else:
-        res = 'Похоже на сегодня новостей еще не набралось'
+        res = 'Похоже на сегодня Security lab ничего не нашли'
     
     return res
 
@@ -57,7 +57,7 @@ def tproger_news():
     if tprog_todays_news:
         msg = 'Новости с Tproger за сегодня\n'+ '\n'.join(random.choice(tprog_todays_news))
     else:
-        msg = 'Похоже на сегодня нет достойных новостей'
+        msg = 'Похоже на Tproger пока ничего новго'
     return msg
 
 if __name__ == '__main__':
