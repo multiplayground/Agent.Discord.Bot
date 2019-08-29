@@ -1,3 +1,5 @@
 python_test/my_tokens.py
 settings.json
 python_test/bot_modules/settings.py
+__pycache__
+.vscode
