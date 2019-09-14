@@ -24,6 +24,8 @@ lxml = "*"
 setuptools = "*"
 pylint = "*"
 psycopg2 = "*"
+trello = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.7"

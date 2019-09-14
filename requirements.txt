@@ -13,7 +13,7 @@
 aio-pika==5.5.2
 aiohttp
 beautifulsoup4
-connexion
+connexion[swagger-ui]
 dill
 discord
 discord.py
@@ -22,6 +22,10 @@ image
 lxml
 matplotlib
 numpy
+pandas
 pika
 psycopg2
+pylint
 requests
+setuptools
+trello
