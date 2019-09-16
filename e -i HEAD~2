@@ -1,0 +1,84 @@
+[33m6f89f72[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m v0.0.4 in proces get trello data and drawing it
+[33m64091b1[m v0.0.4 change dockerfile
+[33m36ed7c3[m _
+[33maf3720a[m[33m ([m[1;31morigin/develop[m[33m)[m v0.0.4 test gitlab CI #1@
+[33m9fec14d[m some massage
+[33mfbf1b6b[m daily
+[33m51af842[m commit message
+[33m565b2f0[m v0.0.4 fix post news
+[33mc1f53da[m v0.0.4 change list of channels to post news:
+[33m675e3c8[m v0.0.4 change list of channels to post
+[33mc87e08b[m v0.0.4 minor
+[33mdf3e8a6[m v0.0.4 hide tockens
+[33m6d0205c[m hide tokens
+[33mad61cd0[m v0.0.4 change for new server 1st step
+[33mb66579f[m v0.0.4 i hopw last fix of post_news function
+[33m7c5d7ab[m v.0.0.4 next fix of post_news module
+[33m33987b3[m v0.0.5 start work with zoo
+[33mbf39be3[m v0.0.4 change time to post -3 hour for server
+[33m3263bc3[m v0.0.4 still fixing message sendrt
+[33m8c9b9e4[m v0.0.4 small fix in get_news
+[33mcbe15f1[m v0.0.4 fix get_news
+[33mf72a4c3[m v0.0.4 to the last commit
+[33m58eb7e6[m v0.0.4 3 item to post should work
+[33ma2d9242[m one smile change
+[33m87ed0a4[m v0.0.4 first implemintation of news posting
+[33m0257a86[m v0.0.4 get news from habr and security lab
+[33m146b5ce[m v0.0.4 starting news send
+[33m04c0d9e[m Merge tag 'tag/change_git' into develop
+[33m1648497[m Merge branch 'hotfix/change_git'
+[33mdb6e999[m v0.0.3 commit
+[33m35529b6[m finish hotfix
+[33m1fa45f0[m deleting file from traking
+[33me8b6647[m Delete settings.py
+[33m2837ed3[m Delete my_tokens.py
+[33m7f34d67[m Delete my_tokens.py
+[33m0095df1[m Delete settings.py
+[33m24af7b1[m working v0.0.3
+[33m861a52f[m commit message
+[33mbe5ba76[m Merge branch 'hotfix/passing_release_changed'
+[33meef6277[m some bugfix in serv str (not ._type but .type)
+[33m676fb0e[m (duplicated)
+[33mb437d37[m v0.0.3 add manage_with_db again
+[33mae62736[m Merge tag 'tagpassing_release' into develop
+[33mb0c71aa[m commit before marge
+[33madd1ed2[m commit before merge
+[33m290aedf[m v0.0.3 fix serv struct, remake imagesender
+[33m264a28b[m Merge branch 'develop' of https://github.com/SpIIIII/Agent.Discord.Bot into develop
+[33m10ae4ad[m v0.0.3 serv struct fix
+[33m57affc1[m Delete my_token.py
+[33mab53183[m Delete my_token.py
+[33ma14c981[m minor changes
+[33m6fe0ae4[m v0.0.3 first git_activity implementation done
+[33mbd679e5[m v0.0.3 plot for user's isues - done
+[33mc669a9c[m minor change
+[33mf56a553[m v0.0.3 start user's git activity feature
+[33m0a1b7eb[m v0.0.2 time limint to response, add !level
+[33m2cdf57d[m v0.0.2 add comand list
+[33me080c8d[m v 0.0.2 add level command
+[33mc3f4a28[m v 0.0.2 connect to base, start !score command
+[33me42efb2[m v 0.0.3 cout medals, start reaction watcher
+[33mf637505[m version that run on server v 0.0.2
+[33md69a02d[m change version string to v 0.0.2
+[33m6c44408[m change pipfile
+[33mb690ca6[m v 0.0.2 prepare to pack in docker
+[33m23f7685[m Merge tag 'tagMLP_bot_v_0.0.2' into develop
+[33m0a381d4[m changes before merge
+[33m97fbb76[m next last changes
+[33m86b9685[m last changes
+[33m58f8755[m remove some unnecessary comments
+[33mdae300c[m delete some comments
+[33me769c35[m v 0.0.1 first semi-master version
+[33m97c3cd2[m v 0.0.1 finish functional of MLP structure
+[33meb69819[m v 0.0.1 first structure send
+[33m926b024[m v 0.0.1 inter stage of connect with RpcClient
+[33mb82d459[m test private message
+[33m830e5c4[m v 0.0.2 add some features
+[33m852bc4b[m v 0.0.1 add send serv_struct to rabbit
+[33me8e33d4[m step to next version
+[33m35eb3c3[m first simple working version alpha 0.0.1
+[33mfafe0fb[m some intermidiate stage
+[33m1dfda90[m minor changes
+[33m83f8bf1[m first implementation of server's structure driving script
+[33m634b901[m first test run
+[33m36c0610[m Initial commit
