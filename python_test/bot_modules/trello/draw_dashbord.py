@@ -1,35 +1,80 @@
+import  matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
 import numpy as np
 import json
+
 from get_trelo_score import get_trello_data
 
+def make_dataframe_by(value:str=None):
+    '''
+    Function that get data from trello and for a Data frame of required data
+    first 3 columns contain that required data such:    '0' name of card
+                                                        '1' data when card have been started
+                                                        '2' data when card finished if so
+    all other columns contain data by with we can choose them:
+                                                        3-(-1) member that assigned to card
+                                                        -1 name of list to which card belon
+    you can pass string with interesting value of feature as an argument and gen whole spectre of rows
+    where that feature is present: for expample you can pass neme list of cards 'Backlog'                                                    
+                                                                                                            
+    '''
+    # trello_data = get_trello_data()
+    # with open ('trello_data.txt','w') as file:
+    #     file.write(json.dumps(trello_data))
+    with open('trello_data.txt','r') as file:
+        trello_data = json.load(file)
 
-# trello_data = get_trello_data()
-# with open ('trello_data.txt','w') as file:
-#     file.write(json.dumps(trello_data))
-with open('trello_data.txt','r') as file:
-    trello_data = json.load(file)
+    # Find maximum members per card for set index dataframe dimension
+    max_len = max([len(i[2]['who']) if i[2]['who'] else 0 for i in trello_data])    
+                                                                                    
+    # Indeces by list taht contain the card
+    indeces1 = [el[0] for el in trello_data]
+
+    # Semple of Dataframe that will be filled with propriate data                                       
+    indeces2 = pd.DataFrame(index =range(len(indeces1)),columns = range(max_len+1)).fillna(0)   
+
+    # Fill resulting DataFrame with members
+    #  one column for eache member with respect of card where they participate
+    for i in range(max_len):                                                      
+        indeces2.iloc[:,i] = [  el[2]['who'][i] 
+                                if el[2]['who'] and len(el[2]['who']) > i 
+                                else None 
+                                for el in trello_data]
+
+    #  Fille last column with list name to which each card belong
+    indeces2.iloc[:,-1]= indeces1
+
+    # Collect interesting data: 1) card name 2) card start time 3) card finish time if it is
+    data = [  (el[1],el[2]['time_start'],el[2]['time_close']) 
+                for el in trello_data]
+
+    # Accemble result dataframe
+    indeces3 = pd.DataFrame(data) 
+    result = pd.concat([indeces3,indeces2],axis = 1,ignore_index = True)
+  
+    if value:
+        result = result[(result==value).any(axis=1)]
+       
+    return(result)
+    
+    # print(frame[0][(frame=='Wombat(Олег)').any(axis=1)])
 
 
-max_len = max([len(i[2]['who']) if i[2]['who'] else 0 for i in trello_data])    # Find maximum members per card for set
-                                                                                #    index dataframe dimension
+def draw_dashbord():
 
-indeces1 = [el[0] for el in trello_data]                                        # First column of index dataframe
-indeces2 = pd.DataFrame(index =range(len(indeces1)),columns = range(max_len+1)).fillna(0)     # Rest index_dataframe columns
-for i in range(max_len):                                                        # Fill rest columns with respect of number
-                                                                                #    of members (max_len) 
-    indeces2.iloc[:,i] = [  el[2]['who'][i] 
-                              if el[2]['who'] and len(el[2]['who']) > i 
-                              else None 
-                              for el in trello_data]
-indeces2.iloc[:,-1]= indeces1
-data = [  (el[1],el[2]['time_start'],el[2]['time_close']) 
-              for el in trello_data]
-x =   zip(*data)
+    data = make_dataframe_by()
+    with plt.style.context('ggplot'):
+        fig = plt.figure(figsize=(10,5))
+        grid = plt.GridSpec(2,4,hspace = 0.2,wspace = 0.2)
+        main_ax = fig.add_subplot(grid[:-1,1:])
+        hist = fig.add_subplot(grid[:-1,0])
+        x_hist = fig.add_subplot(grid[-1,:-1])
+        # axs[0,0].hist(data[5])
 
-indeces = pd.DataFrame(data)
-frame = pd.concat([indeces, indeces2],axis=1,ignore_index=True)
+        hist.hist(data[5])
+        plt.show()
 
-# print(frame.loc[frame[4]=='Inbox'])
-print(frame[0][])
+
+if __name__ == '__main__':
+    print(draw_dashbord())
