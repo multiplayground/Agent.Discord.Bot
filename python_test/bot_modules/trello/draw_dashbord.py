@@ -1,3 +1,4 @@
+import matplotlib.dates as mdates
 import  matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
@@ -5,6 +6,7 @@ import numpy as np
 import json
 
 from get_trelo_score import get_trello_data
+from mpl_toolkits.mplot3d import Axes3D
 
 def make_dataframe_by(value:str=None):
     '''
@@ -46,15 +48,15 @@ def make_dataframe_by(value:str=None):
     indeces2.iloc[:,-1]= indeces1
 
     # Collect interesting data: 1) card name 2) card start time 3) card finish time if it is
-    data = [  (el[1],el[2]['time_start'],el[2]['time_close']) 
+    data = [  (el[1],t(el[2]['time_start']),t(el[2]['time_close'])) 
                 for el in trello_data]
-
+    
     # Accemble result dataframe
     indeces3 = pd.DataFrame(data) 
     result = pd.concat([indeces3,indeces2],axis = 1,ignore_index = True)
   
     if value:
-        result = result[(result==value).any(axis=1)]
+        result = select_from_dataframe(result,value)
        
     return(result)
     
@@ -62,19 +64,51 @@ def make_dataframe_by(value:str=None):
 
 
 def draw_dashbord():
-
+    '''
+        Actualy draw desiered dashbord 
+    '''
     data = make_dataframe_by()
-    with plt.style.context('ggplot'):
-        fig = plt.figure(figsize=(10,5))
-        grid = plt.GridSpec(2,4,hspace = 0.2,wspace = 0.2)
-        main_ax = fig.add_subplot(grid[:-1,1:])
-        hist = fig.add_subplot(grid[:-1,0])
-        x_hist = fig.add_subplot(grid[-1,:-1])
-        # axs[0,0].hist(data[5])
 
-        hist.hist(data[5])
+    # Set some pretty style to plot
+    with plt.style.context('seaborn'):
+        fig = plt.figure(figsize=(40,20))
+        fig.autofmt_xdate()
+
+        # Brake figure to grid of axis
+        grid = plt.GridSpec(2,4,hspace = 0.1,wspace = 0.1)
+
+        # Setup places to eachi axes
+        main_ax = fig.add_subplot(grid[:-1,1:])
+        hist_ax = fig.add_subplot(grid[:-1,0])
+        third_ax = fig.add_subplot(grid[-1,:-1])
+        forth_ax = fig.add_subplot(grid[-1,-1])
+        
+        # Pass needed data to every ax
+        hist_ax.hist(data[5])
+        data[2].hist(ax=main_ax)
+        # main_ax.set_xlim(data[1].min(),)
+        # main_ax.xaxis.set_major_locator(data[2])
         plt.show()
+
+def t(time:str=None):
+    '''
+       Conver string with time to pandas timestamp object
+    '''
+    if time:
+        return pd.Timestamp(time)
+    return None
+
+def select_from_dataframe(data:pd.DataFrame=None,value:str=None):
+    '''
+      Returns row with passed value from dataframe
+    '''
+    if value:
+        return data[(data==value).any(axis=1)]
+    return data
+
 
 
 if __name__ == '__main__':
-    print(draw_dashbord())
+    # make_dataframe_by()
+    print(make_dataframe_by())
+    # draw_dashbord()
