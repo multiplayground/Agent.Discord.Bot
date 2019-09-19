@@ -12,6 +12,7 @@ import json
 import sys
 import os
 
+from bot_modules.trello.draw_dashbord import draw_dashbord
 from bot_modules.send_img import Send_img
 from bot_modules.post_news_module.post_news import post_news,send_news
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
@@ -34,11 +35,20 @@ async def on_message (message):
         channel_to_send= message.channel
         await message.delete()
 
+    if message.content=='!':
+        await message.channel.send("Список команд на данынй момент:\n\t\
+                                    !level    - узнать уровень пользователя в проекте\n\t\
+                                    !news     - чтобы узнать побольше интересного\n\t\
+                                    !git      - покажет статистику участия в проэкте на остнове git активности\n\t\
+                                    !ceres    - список команд для проэкта ceres\n\t\
+                                    |         - вызвать в чат лоадинг")
+
     if message.content=='!do':
         await message.channel.send("Список команд на данынй момент:\n\t\
                                     !level    - узнать уровень пользователя в проекте\n\t\
                                     !news     - чтобы узнать побольше интересного\n\t\
                                     !git      - покажет статистику участия в проэкте на остнове git активности\n\t\
+                                    !ceres    - список команд для проэкта ceres\n\t\
                                     |         - вызвать в чат лоадинг")
 
     if message.content.startswith('!level'):
@@ -81,7 +91,19 @@ async def on_message (message):
         if '--more' in comands:
             await message.channel.send('  **Еще одна случайная новость не будет лишней**\n')
             await p_nw.more_news(client,message.channel.id)
-        
+
+    if message.content.startswith('!ceres'):
+        _,*comands=message.content.split()
+        ceres_img = Send_img()
+        if '-db' in comands:
+            draw_dashbord()
+            await ceres_img.send_img(message.channel,'ceres_dashbord.png')
+        else:
+            await message.channel.send('Команда *ceres* имеет вид: !ceres *{аргументы}*\n\
+                                                \tСписок аргументов:\n\
+                                                    -db   - Постит небольшой дашборд проекта с основными показателями')
+                                                          
+
     if message.content == '?':
         chant_id = message.channel.id
         author_id =message.author.id

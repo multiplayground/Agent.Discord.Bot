@@ -1,12 +1,16 @@
 import matplotlib.dates as mdates
-import  matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
 import numpy as np
 import json
+import os
 
-from get_trelo_score import get_trello_data
+from .get_trelo_score import get_trello_data
 from mpl_toolkits.mplot3d import Axes3D
+
+
+static=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'static')
 
 def make_dataframe_by(value:str=None):
     '''
@@ -21,11 +25,13 @@ def make_dataframe_by(value:str=None):
     where that feature is present: for expample you can pass neme list of cards 'Backlog'                                                    
                                                                                                             
     '''
-    # trello_data = get_trello_data()
+    trello_data = get_trello_data()
+
     # with open ('trello_data.txt','w') as file:
     #     file.write(json.dumps(trello_data))
-    with open('trello_data.txt','r') as file:
-        trello_data = json.load(file)
+
+    # with open('trello_data.txt','r') as file:
+    #     trello_data = json.load(file)
 
     # Find maximum members per card for set index dataframe dimension
     max_len = max([len(i[2]['who']) if i[2]['who'] else 0 for i in trello_data])    
@@ -70,7 +76,8 @@ def draw_dashbord():
     data = make_dataframe_by()
 
     # Set some pretty style to plot
-    with plt.style.context('seaborn'):
+    with plt.style.context('bmh'):
+
         fig = plt.figure(figsize=(40,20))
         fig.autofmt_xdate()
 
@@ -81,14 +88,22 @@ def draw_dashbord():
         main_ax = fig.add_subplot(grid[:-1,1:])
         hist_ax = fig.add_subplot(grid[:-1,0])
         third_ax = fig.add_subplot(grid[-1,:-1])
-        forth_ax = fig.add_subplot(grid[-1,-1])
+        with plt.style.context('seaborn'):
+            forth_ax = fig.add_subplot(grid[-1,-1],projection = '3d')
         
         # Pass needed data to every ax
         hist_ax.hist(data[5])
-        data[2].hist(ax=main_ax)
-        # main_ax.set_xlim(data[1].min(),)
-        # main_ax.xaxis.set_major_locator(data[2])
-        plt.show()
+        
+        data[1].hist(ax=main_ax,color = 'orange',alpha = 0.5,width = 0.8,label = 'добавлено')
+        data[2].hist(ax=main_ax,width = 0.9,label = 'выполнено')
+        main_ax.set_xlim(data[1].min(),)
+        main_ax.legend(loc  = 'upper left')
+        main_ax.locator_params(axis = 'y',nbins = 10)
+
+        
+        fig.subplots_adjust(left=0.02, right=0.99, bottom=0.03, top=0.99)
+        plt.savefig(static+'/ceres_dashbord.png')
+        # plt.show()
 
 def t(time:str=None):
     '''
@@ -109,6 +124,6 @@ def select_from_dataframe(data:pd.DataFrame=None,value:str=None):
 
 
 if __name__ == '__main__':
-    # make_dataframe_by()
-    print(make_dataframe_by())
-    # draw_dashbord()
+    # print(make_dataframe_by())
+    # print(make_dataframe_by())
+    draw_dashbord()
