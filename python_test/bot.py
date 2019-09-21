@@ -95,13 +95,13 @@ async def on_message (message):
     if message.content.startswith('!ceres'):
         _,*comands=message.content.split()
         ceres_img = Send_img()
-        if '-db' in comands:
+        if '-b' in comands:
             draw_dashbord()
             await ceres_img.send_img(message.channel,'ceres_dashbord.png')
         else:
             await message.channel.send('Команда *ceres* имеет вид: !ceres *{аргументы}*\n\
                                                 \tСписок аргументов:\n\
-                                                    -db   - Постит небольшой дашборд проекта с основными показателями')
+                                                    -b   - Постит небольшой дашборд проекта с основными показателями')
                                                           
 
     if message.content == '?':

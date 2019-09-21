@@ -27,11 +27,11 @@ def make_dataframe_by(value:str=None):
     '''
     trello_data = get_trello_data()
 
-    # with open ('trello_data.txt','w') as file:
-    #     file.write(json.dumps(trello_data))
+                                    # with open ('trello_data.txt','w') as file:
+                                    #     file.write(json.dumps(trello_data))
 
-    # with open('trello_data.txt','r') as file:
-    #     trello_data = json.load(file)
+                                    # with open('trello_data.txt','r') as file:
+                                    #     trello_data = json.load(file)
 
     # Find maximum members per card for set index dataframe dimension
     max_len = max([len(i[2]['who']) if i[2]['who'] else 0 for i in trello_data])    
@@ -78,7 +78,7 @@ def draw_dashbord():
     # Set some pretty style to plot
     with plt.style.context('bmh'):
 
-        fig = plt.figure(figsize=(40,20))
+        fig = plt.figure(figsize=(16,8))
         fig.autofmt_xdate()
 
         # Brake figure to grid of axis
@@ -88,17 +88,22 @@ def draw_dashbord():
         main_ax = fig.add_subplot(grid[:-1,1:])
         hist_ax = fig.add_subplot(grid[:-1,0])
         third_ax = fig.add_subplot(grid[-1,:-1])
-        with plt.style.context('seaborn'):
+        with plt.style.context('seaborn-white'):
             forth_ax = fig.add_subplot(grid[-1,-1],projection = '3d')
         
-        # Pass needed data to every ax
-        hist_ax.hist(data[5])
+        # Pass needed data to first axes
+        hist_ax.hist(data[5],label = 'Колличество задач')
+        hist_ax.legend(loc = 'upper right')
         
+        # Pass needed data to second axes
         data[1].hist(ax=main_ax,color = 'orange',alpha = 0.5,width = 0.8,label = 'добавлено')
         data[2].hist(ax=main_ax,width = 0.9,label = 'выполнено')
         main_ax.set_xlim(data[1].min(),)
         main_ax.legend(loc  = 'upper left')
         main_ax.locator_params(axis = 'y',nbins = 10)
+
+        # Pass needed data to therd axes
+        third_ax
 
         
         fig.subplots_adjust(left=0.02, right=0.99, bottom=0.03, top=0.99)
@@ -125,5 +130,5 @@ def select_from_dataframe(data:pd.DataFrame=None,value:str=None):
 
 if __name__ == '__main__':
     # print(make_dataframe_by())
-    # print(make_dataframe_by())
-    draw_dashbord()
+    print(make_dataframe_by())
+    # draw_dashbord()
