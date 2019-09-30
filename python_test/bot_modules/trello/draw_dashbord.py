@@ -26,10 +26,10 @@ def make_dataframe_by(value:str=None):
     where that feature is present: for expample you can pass neme list of cards 'Backlog'                                                    
                                                                                                             
                         '''
-                        # trello_data = get_trello_data()
+    # trello_data = get_trello_data()
 
-                        # with open ('trello_data.txt','w') as file:
-                        #     file.write(json.dumps(trello_data))
+    # with open ('trello_data.txt','w') as file:
+    #     file.write(json.dumps(trello_data))
 
     with open('trello_data.txt','r') as file:
         trello_data = json.load(file)
@@ -63,7 +63,7 @@ def make_dataframe_by(value:str=None):
     # Accemble result dataframe
     indeces3 = pd.DataFrame(data) 
     result = pd.concat([indeces3,indeces2],axis = 1,ignore_index = True)
-  
+    result.index=result[1]
     if value:
         result = select_from_dataframe(result,value)
        
@@ -106,6 +106,14 @@ def draw_dashbord():
         main_ax.locator_params(axis = 'y',nbins = 10)
 
         # Pass needed data to therd axes
+          #some defining points from
+        sub_data = sub_culc_for_rate_graph(data,'backend')
+        third_ax.plot(sub_data.index,sub_data['sub'])
+        third_ax.fill_between(sub_data.index,sub_data['sub'],0,alpha=0.5)
+        third_ax.set_ylim(0,30)
+
+        
+        
         
         fig.subplots_adjust(left=0.02, right=0.99, bottom=0.03, top=0.99)
         # plt.savefig(static+'/ceres_dashbord.png')
@@ -127,14 +135,19 @@ def select_from_dataframe(data:pd.DataFrame=None,value:str=None):
         return data[(data==value).any(axis=1)]
     return data
 
-def sub_frame(data:pd.DataFrame,label:str):
-    data_by = select_from_dataframe(data,'backend')
-    result = pd.DataFrame(index = data_by.sort_values(1)[1])
-    result
-    return result
-
+def sub_culc_for_rate_graph(data:pd.DataFrame,label:str):
+    back = select_from_dataframe(data,label).sort_index()
+    x:list = list()
+    for i in back.index:
+        x.append(back[back.index<=i][back==label][3].value_counts().values[0])
+    back['sub']=x
+    return back
 
 
 if __name__ == '__main__':
-    print(sub_frame(make_dataframe_by(),'frontend'))
-    # draw_dashbord()
+    sub_data = sub_culc_for_rate_graph(make_dataframe_by(),'backend')
+    print(sub_data.iloc[:,-1])
+    draw_dashbord()
+    
+    
+    

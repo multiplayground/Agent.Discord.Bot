@@ -35,7 +35,7 @@ async def on_message (message):
         channel_to_send= message.channel
         await message.delete()
 
-    if message.content=='!':
+    if message.content.startswith('! '):
         await message.channel.send("Список команд на данынй момент:\n\t\
                                     !level    - узнать уровень пользователя в проекте\n\t\
                                     !news     - чтобы узнать побольше интересного\n\t\
@@ -103,7 +103,6 @@ async def on_message (message):
                                                 \tСписок аргументов:\n\
                                                     -b   - Постит небольшой дашборд проекта с основными показателями')
                                                           
-
     if message.content == '?':
         chant_id = message.channel.id
         author_id =message.author.id
