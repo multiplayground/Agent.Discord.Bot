@@ -6,7 +6,7 @@ import numpy as np
 import json
 import os
 
-from get_trelo_score import get_trello_data
+from .get_trelo_score import get_trello_data
 from mpl_toolkits.mplot3d import Axes3D
 
 
@@ -26,13 +26,13 @@ def make_dataframe_by(value:str=None):
     where that feature is present: for expample you can pass neme list of cards 'Backlog'                                                    
                                                                                                             
                         '''
-    # trello_data = get_trello_data()
+    trello_data = get_trello_data()
 
     # with open ('trello_data.txt','w') as file:
     #     file.write(json.dumps(trello_data))
 
-    with open('trello_data.txt','r') as file:
-        trello_data = json.load(file)
+    # with open('trello_data.txt','r') as file:
+    #     trello_data = json.load(file)
 
     # Find maximum members per card for set index dataframe dimension
     max_len = max([len(i[2]['who']) if i[2]['who'] else 0 for i in trello_data])    
@@ -59,7 +59,6 @@ def make_dataframe_by(value:str=None):
                 for el in trello_data]
 
     
-    
     # Accemble result dataframe
     indeces3 = pd.DataFrame(data) 
     result = pd.concat([indeces3,indeces2],axis = 1,ignore_index = True)
@@ -67,7 +66,7 @@ def make_dataframe_by(value:str=None):
     if value:
         result = select_from_dataframe(result,value)
        
-    return(result)
+    return result
     
     # print(frame[0][(frame=='Wombat(Олег)').any(axis=1)])
 
@@ -102,22 +101,26 @@ def draw_dashbord():
         data[1].hist(ax=main_ax,color = 'orange',alpha = 0.5,width = 0.8,label = 'добавлено')
         data[2].hist(ax=main_ax,width = 0.9,label = 'выполнено')
         main_ax.set_xlim(data[1].min(),)
-        main_ax.legend(loc  = 'upper left')
+        main_ax.legend(title='Всего задач по времени',loc  = 'upper left')
         main_ax.locator_params(axis = 'y',nbins = 10)
 
         # Pass needed data to therd axes
           #some defining points from
-        sub_data = sub_culc_for_rate_graph(data,'backend')
-        third_ax.plot(sub_data.index,sub_data['sub'])
-        third_ax.fill_between(sub_data.index,sub_data['sub'],0,alpha=0.5)
+        sub_data, second_data = sub_culc_for_rate_graph(data,'backend')
+        
+        third_ax.plot(sub_data.index,sub_data,color = 'orange',label='Добавлены')
+        third_ax.fill_between(sub_data.index,sub_data,0,alpha=0.3,color = 'orange')
+        third_ax.plot(second_data.index,second_data,label='Выполнено')
+        third_ax.fill_between(second_data.index,second_data,0,alpha=0.5)
+        third_ax.legend(title = 'Задания Backend',loc = 'upper left')
         third_ax.set_ylim(0,30)
 
         
         
         
         fig.subplots_adjust(left=0.02, right=0.99, bottom=0.03, top=0.99)
-        # plt.savefig(static+'/ceres_dashbord.png')
-        plt.show()
+        plt.savefig(static+'/ceres_dashbord.png')
+        # plt.show()
 
 def t(time:str=None):
     '''
@@ -138,15 +141,24 @@ def select_from_dataframe(data:pd.DataFrame=None,value:str=None):
 def sub_culc_for_rate_graph(data:pd.DataFrame,label:str):
     back = select_from_dataframe(data,label).sort_index()
     x:list = list()
+    y:list = list()
     for i in back.index:
         x.append(back[back.index<=i][back==label][3].value_counts().values[0])
+    back_ = back.dropna(subset=[2]).sort_values([2])
+    for i in back_[2]:
+        y.append(back[back[2]>=i][back==label][3].value_counts().values[0])
+
     back['sub']=x
-    return back
+    back = back['sub']
+    back_['sub']=y
+    back_ = back_['sub']
+    
+    return back,back_
 
 
 if __name__ == '__main__':
-    sub_data = sub_culc_for_rate_graph(make_dataframe_by(),'backend')
-    print(sub_data.iloc[:,-1])
+    sub_data, second_data = sub_culc_for_rate_graph(make_dataframe_by(),'backend')
+    print(sub_data, second_data)
     draw_dashbord()
     
     
