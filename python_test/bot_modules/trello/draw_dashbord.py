@@ -31,8 +31,6 @@ def make_dataframe_by(value:str=None):
     # with open ('trello_data.txt','w') as file:
     #     file.write(json.dumps(trello_data))
 
-    # with open('trello_data.txt','r') as file:
-    #     trello_data = json.load(file)
 
     # Find maximum members per card for set index dataframe dimension
     max_len = max([len(i[2]['who']) if i[2]['who'] else 0 for i in trello_data])    
@@ -105,13 +103,27 @@ def draw_dashbord():
         main_ax.locator_params(axis = 'y',nbins = 10)
 
         # Pass needed data to therd axes
-          #some defining points from
-        sub_data, second_data = sub_culc_for_rate_graph(data,'backend')
+        # get data to plot frontend statistick
+        open_b,close_b = sub_culc_for_rate_graph(data,'backend')
+        # get data to plot backend statistick
+        open_f,close_f = sub_culc_for_rate_graph(data,'frontend')
         
-        third_ax.plot(sub_data.index,sub_data,color = 'orange',label='Добавлены')
-        third_ax.fill_between(sub_data.index,sub_data,0,alpha=0.3,color = 'orange')
-        third_ax.plot(second_data.index,second_data,label='Выполнено')
-        third_ax.fill_between(second_data.index,second_data,0,alpha=0.5)
+        # plot backend statisticn 
+        third_ax.plot(open_b.index,open_b,color = 'orange',label='Добавлены')
+        third_ax.fill_between(open_b.index,open_b,0,alpha=0.3,color = 'orange')
+
+        third_ax.plot(close_b.index,close_b,label='Выполнено')
+        third_ax.fill_between(close_b.index,close_b,0,alpha=0.5)
+
+        # plot frontend statisticn
+
+        third_ax.plot(open_f.index,open_f+15,color = 'orange',label='Добавлены')
+        third_ax.fill_between(open_f.index,open_f+15,15,alpha=0.3,color = 'orange')
+
+        third_ax.plot(close_f.index,close_f+15,label='Выполнено')
+        third_ax.fill_between(close_f.index,close_f+15,15,alpha=0.5)
+
+        #
         third_ax.legend(title = 'Задания Backend',loc = 'upper left')
         third_ax.set_ylim(0,30)
 
@@ -144,22 +156,30 @@ def sub_culc_for_rate_graph(data:pd.DataFrame,label:str):
     y:list = list()
     for i in back.index:
         x.append(back[back.index<=i][back==label][3].value_counts().values[0])
-    back_ = back.dropna(subset=[2]).sort_values([2])
+    back_ = back.dropna(subset=[2]).copy().sort_values([2])
+    back_ = back_
     for i in back_[2]:
-        y.append(back[back[2]>=i][back==label][3].value_counts().values[0])
+        y.append(back[back[2]<=i][back==label][3].value_counts().values[0])
 
     back['sub']=x
     back = back['sub']
+    back.loc[pd.to_datetime('today')] = back.max()
+
     back_['sub']=y
+    back_.set_index(pd.to_datetime(back_[2]).dt.tz_localize(None),inplace=True)
     back_ = back_['sub']
+    back_.loc[pd.to_datetime('today')] = back_.max()
     
     return back,back_
 
 
 if __name__ == '__main__':
-    sub_data, second_data = sub_culc_for_rate_graph(make_dataframe_by(),'backend')
-    print(sub_data, second_data)
-    draw_dashbord()
-    
+    from get_trelo_score import get_trello_data
+    with open('trello_data.txt','r') as file:
+        trello_data = json.load(file)
+
+    # open_b,close_b = sub_culc_for_rate_graph(make_dataframe_by(),'backend')
+    print(make_dataframe_by('frontend'))
+    # draw_dashbord()    
     
     
