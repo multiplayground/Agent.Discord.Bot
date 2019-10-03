@@ -9,7 +9,7 @@ import os
 from .get_trelo_score import get_trello_data
 from mpl_toolkits.mplot3d import Axes3D
 
-
+# path to safe drawn dashbord
 static=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'static')
 
 def make_dataframe_by(value:str=None):
@@ -28,8 +28,8 @@ def make_dataframe_by(value:str=None):
                         '''
     trello_data = get_trello_data()
 
-    # with open ('trello_data.txt','w') as file:
-    #     file.write(json.dumps(trello_data))
+                # with open ('trello_data.txt','w') as file:
+                #     file.write(json.dumps(trello_data))
 
 
     # Find maximum members per card for set index dataframe dimension
@@ -68,7 +68,6 @@ def make_dataframe_by(value:str=None):
     
     # print(frame[0][(frame=='Wombat(Олег)').any(axis=1)])
 
-
 def draw_dashbord():
     '''
         Actualy draw desiered dashbord 
@@ -82,22 +81,24 @@ def draw_dashbord():
         fig.autofmt_xdate()
 
         # Brake figure to grid of axis
-        grid = plt.GridSpec(2,4,hspace = 0.1,wspace = 0.1)
+        grid = plt.GridSpec(4,4,hspace = 0.1,wspace = 0.1)
 
         # Setup places to eachi axes
-        main_ax = fig.add_subplot(grid[:-1,1:])
-        hist_ax = fig.add_subplot(grid[:-1,0])
-        third_ax = fig.add_subplot(grid[-1,:-1])
+        main_ax = fig.add_subplot(grid[:-2,1:])
+        hist_ax = fig.add_subplot(grid[:-2,0])
+        forth_ax = fig.add_subplot(grid[3,:-1])
+        third_ax = fig.add_subplot(grid[2,:-1],sharex=forth_ax)
+        plt.setp(third_ax.get_xticklabels(), visible=False)
         with plt.style.context('seaborn-white'):
-            forth_ax = fig.add_subplot(grid[-1,-1],projection = '3d')
+            fifth = fig.add_subplot(grid[-2:,-1:],projection = '3d')
         
         # Pass needed data to first axes
         hist_ax.hist(data[6],label = 'Колличество задач')
         hist_ax.legend(loc = 'upper right')
         
         # Pass needed data to second axes
-        data[1].hist(ax=main_ax,color = 'orange',alpha = 0.5,width = 0.8,label = 'добавлено')
-        data[2].hist(ax=main_ax,width = 0.9,label = 'выполнено')
+        data[1].hist(ax=main_ax,color = 'orange',alpha = 0.5,width = 0.8,label = 'добавлены')
+        data[2].hist(ax=main_ax,width = 0.9,label = 'выполнены')
         main_ax.set_xlim(data[1].min(),)
         main_ax.legend(title='Всего задач по времени',loc  = 'upper left')
         main_ax.locator_params(axis = 'y',nbins = 10)
@@ -109,28 +110,31 @@ def draw_dashbord():
         open_f,close_f = sub_culc_for_rate_graph(data,'frontend')
         
         # plot backend statisticn 
-        third_ax.plot(open_b.index,open_b,color = 'orange',label='Добавлены')
+        
+        third_ax.plot(open_b.index,open_b,color = 'orange',label='добавлены')
         third_ax.fill_between(open_b.index,open_b,0,alpha=0.3,color = 'orange')
 
-        third_ax.plot(close_b.index,close_b,label='Выполнено')
+        third_ax.plot(close_b.index,close_b,label='выполнены')
         third_ax.fill_between(close_b.index,close_b,0,alpha=0.5)
 
+        third_ax.set_ylim(0,open_b.max()+10)
+
         # plot frontend statisticn
+        forth_ax.plot(open_f.index,open_f,color = 'orange',label='добавлены')
+        forth_ax.fill_between(open_f.index,open_f,0,alpha=0.3,color = 'orange')
 
-        third_ax.plot(open_f.index,open_f+15,color = 'orange',label='Добавлены')
-        third_ax.fill_between(open_f.index,open_f+15,15,alpha=0.3,color = 'orange')
+        forth_ax.plot(close_f.index,close_f,label='выполнены')
+        forth_ax.fill_between(close_f.index,close_f,0,alpha=0.5)
+        
+        forth_ax.set_ylim(0,open_f.max()+10)
 
-        third_ax.plot(close_f.index,close_f+15,label='Выполнено')
-        third_ax.fill_between(close_f.index,close_f+15,15,alpha=0.5)
-
-        #
+        # place legends for back and frontend graphs
         third_ax.legend(title = 'Задания Backend',loc = 'upper left')
-        third_ax.set_ylim(0,30)
+        forth_ax.legend(title = 'Задания Frontend',loc = 'upper left')
 
-        
-        
-        
         fig.subplots_adjust(left=0.02, right=0.99, bottom=0.03, top=0.99)
+
+
         plt.savefig(static+'/ceres_dashbord.png')
         # plt.show()
 
@@ -151,6 +155,11 @@ def select_from_dataframe(data:pd.DataFrame=None,value:str=None):
     return data
 
 def sub_culc_for_rate_graph(data:pd.DataFrame,label:str):
+    '''
+        Function that calculat quantity of 
+        open and close tasks in backend and frontend.
+    
+    '''
     back = select_from_dataframe(data,label).sort_index()
     x:list = list()
     y:list = list()
@@ -177,9 +186,6 @@ if __name__ == '__main__':
     from get_trelo_score import get_trello_data
     with open('trello_data.txt','r') as file:
         trello_data = json.load(file)
-
-    # open_b,close_b = sub_culc_for_rate_graph(make_dataframe_by(),'backend')
-    print(make_dataframe_by('frontend'))
-    # draw_dashbord()    
+    draw_dashbord()    
     
     
