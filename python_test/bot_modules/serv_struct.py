@@ -89,7 +89,7 @@ async def my_background_task(client):
                     await str_img.send_img(client.get_channel(settings.main_channel),'serv_sturct.png')
             
             
-        await asyncio.sleep(1)
+        await asyncio.sleep(10)
 
 
 

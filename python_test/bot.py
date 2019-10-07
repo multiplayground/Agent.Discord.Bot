@@ -8,12 +8,14 @@ import settings                          #import id of channels exists on server
 import logging
 import discord
 import asyncio
+import tasks
 import json
 import sys
 import os
 
-from bot_modules.trello.draw_dashbord import draw_dashbord
+
 from bot_modules.send_img import Send_img
+from bot_modules.trello.draw_dashbord import draw_dashbord
 from bot_modules.post_news_module.post_news import post_news,send_news
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 
@@ -122,6 +124,7 @@ async def on_ready():
         loop = asyncio.get_event_loop()
         loop.create_task(loading())
         loop.create_task(my_background_task(client))
+        loop.create_task(tasks.ceres_dashbord(client))
         loop.create_task(p_nw.post_news(client))
         
         initialized = 1

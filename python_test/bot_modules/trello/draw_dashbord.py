@@ -10,7 +10,7 @@ from .get_trelo_score import get_trello_data
 from mpl_toolkits.mplot3d import Axes3D
 
 # path to safe drawn dashbord
-static=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'static')
+static=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'static/')
 
 def make_dataframe_by(value:str=None):
     '''
@@ -135,7 +135,7 @@ def draw_dashbord():
         fig.subplots_adjust(left=0.02, right=0.99, bottom=0.03, top=0.99)
 
 
-        plt.savefig(static+'/ceres_dashbord.png')
+        plt.savefig(static+'ceres_dashbord_pre.png')
         # plt.show()
 
 def t(time:str=None):

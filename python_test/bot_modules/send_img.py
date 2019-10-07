@@ -16,6 +16,14 @@ class Send_img:
         if self.img != None:
             await self.img.delete()
 
+    async def maintain_img (self,channel,image):
+        if self.img == None:
+            await self.send_img(channel,image)
+            break
+        await self.del_img()
+        await self.send_img(channel,image)
+        
+
 '''
 static=os.path.join(os.path.dirname(os.path.dirname(__file__)),'static/')
 
