@@ -15,15 +15,13 @@ def is_similar(img_1:str,img_2:str)-> bool:
     # directory with images
     static=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'static/')
 
-    if os.path.isfile(static+img_1):
-        img_1_hash = imagehash.average_hash(Image.open(static+img_1))
-        img_2_hash = imagehash.average_hash(Image.open(static+img_2))
+    img_1_hash = imagehash.average_hash(Image.open(static+img_1))
+    img_2_hash = imagehash.average_hash(Image.open(static+img_2))
 
-        if img_1_hash != img_2_hash:
-            os.remove(static+img_1)
-            os.rename(static+img_2,static+img_1)
-            return False
-        return True
-    os.rename(static+img_2,static+img_1)
-    return False
+    if img_1_hash != img_2_hash:
+        os.remove(static+img_1)
+        os.rename(static+img_2,static+img_1)
+        return False
+    
+    return True
     

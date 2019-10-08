@@ -1,7 +1,6 @@
 '''
     The module where storing all task-routines that MLP_Bot provide
 '''
-
 import channels_module
 import asyncio
 import os
@@ -27,10 +26,10 @@ async def ceres_dashbord (client):
 
         # check if new statement different and if so replace an old one
         # after wich post
-        if  check_similar.is_similar('ceres_dashbord.png','ceres_dashbord_pre.png'):
+        if  not check_similar.is_similar('ceres_dashbord.png','ceres_dashbord_pre.png'):
             await ceres_bord.maintain_img(client.get_channel(channels_module.ceres_stats),'ceres_dashbord.png')
 
-        await asyncio.sleep(1800)
+        await asyncio.sleep(300)
     
     
     

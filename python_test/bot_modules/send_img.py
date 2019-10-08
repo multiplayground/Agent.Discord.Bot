@@ -19,9 +19,9 @@ class Send_img:
     async def maintain_img (self,channel,image):
         if self.img == None:
             await self.send_img(channel,image)
-            break
-        await self.del_img()
-        await self.send_img(channel,image)
+        else:
+            await self.del_img()
+            await self.send_img(channel,image)
         
 
 '''
