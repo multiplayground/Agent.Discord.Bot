@@ -1,0 +1,17 @@
+image: docker:git
+
+services:
+- docker:dind
+
+variables:
+  MLP_BOT=${MLP_BOT}
+  MLP_GIT=${MLP_BOT}
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+job 1:
+  stage: build and stage
+  script:
+  - docker build -t spiii/mlp_bot:v0.0.4 .
+  - docker push
