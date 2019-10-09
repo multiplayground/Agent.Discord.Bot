@@ -13,12 +13,13 @@
 aio-pika==5.5.2
 aiohttp
 beautifulsoup4
-connexion[swagger-ui]
+connexion
 dill
 discord
 discord.py
 graphene
 image
+imagehash
 lxml
 matplotlib
 numpy

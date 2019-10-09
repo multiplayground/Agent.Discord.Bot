@@ -26,6 +26,7 @@ pylint = "*"
 psycopg2 = "*"
 trello = "*"
 pandas = "*"
+imagehash = "*"
 
 [requires]
 python_version = "3.7"

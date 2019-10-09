@@ -8,12 +8,14 @@ import settings                          #import id of channels exists on server
 import logging
 import discord
 import asyncio
+import tasks
 import json
 import sys
 import os
 
-from bot_modules.trello.draw_dashbord import draw_dashbord
+
 from bot_modules.send_img import Send_img
+from bot_modules.trello.draw_dashbord import draw_dashbord
 from bot_modules.post_news_module.post_news import post_news,send_news
 from bot_modules.serv_struct import my_background_task,channels_to_MQ,return_struct
 
@@ -35,7 +37,7 @@ async def on_message (message):
         channel_to_send= message.channel
         await message.delete()
 
-    if message.content=='!':
+    if message.content.startswith('! '):
         await message.channel.send("Список команд на данынй момент:\n\t\
                                     !level    - узнать уровень пользователя в проекте\n\t\
                                     !news     - чтобы узнать побольше интересного\n\t\
@@ -71,7 +73,7 @@ async def on_message (message):
     if message.content.startswith('!git'):
         git_img = Send_img()
         _,*comands=message.content.split()
-        print(comands)
+        
         if '-is' in comands:
             print('git is')
             m_gi.make_all_users_plot()
@@ -103,7 +105,6 @@ async def on_message (message):
                                                 \tСписок аргументов:\n\
                                                     -b   - Постит небольшой дашборд проекта с основными показателями')
                                                           
-
     if message.content == '?':
         chant_id = message.channel.id
         author_id =message.author.id
@@ -121,8 +122,9 @@ async def on_ready():
     if initialized == 0:
         
         loop = asyncio.get_event_loop()
+        loop.create_task(tasks.ceres_dashbord(client))
         loop.create_task(loading())
-        loop.create_task(my_background_task(client))
+        loop.create_task(my_background_task(client))        
         loop.create_task(p_nw.post_news(client))
         
         initialized = 1
@@ -141,10 +143,10 @@ async def loading():
             msg = await channel_to_send.send('\n\nstarting...')
             msg_id=msg.id
         msg = await channel_to_send.fetch_message(msg_id)
-        await msg.edit(content='\n\nMLP Bot v 0.0.4\n│')
-        await msg.edit(content='\n\nMLP Bot v 0.0.4\n╱')
-        await msg.edit(content='\n\nMLP Bot v 0.0.4\n━')
-        await msg.edit(content='\n\nMLP Bot v 0.0.4\n╲')
+        await msg.edit(content='\n\nMLP Bot v 0.0.5\n│')
+        await msg.edit(content='\n\nMLP Bot v 0.0.5\n╱')
+        await msg.edit(content='\n\nMLP Bot v 0.0.5\n━')
+        await msg.edit(content='\n\nMLP Bot v 0.0.5\n╲')
        
 
 
