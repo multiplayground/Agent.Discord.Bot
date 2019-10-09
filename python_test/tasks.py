@@ -29,7 +29,7 @@ async def ceres_dashbord (client):
         if  not check_similar.is_similar('ceres_dashbord.png','ceres_dashbord_pre.png'):
             await ceres_bord.maintain_img(client.get_channel(channels_module.ceres_stats),'ceres_dashbord.png')
 
-        await asyncio.sleep(300)
+        await asyncio.sleep(1800)
     
     
     

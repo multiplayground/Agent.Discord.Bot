@@ -94,7 +94,7 @@ def draw_dashbord():
         
         # Pass needed data to first axes
         hist_ax.hist(data[6],label = 'Колличество задач')
-        hist_ax.legend(loc = 'upper right')
+        hist_ax.legend(loc = 'best')
         
         # Pass needed data to second axes
         data[1].hist(ax=main_ax,color = 'orange',alpha = 0.5,width = 0.8,label = 'добавлены')
